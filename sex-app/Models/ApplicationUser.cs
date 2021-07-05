@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace sex_app.Models
 {
@@ -25,6 +26,7 @@ namespace sex_app.Models
 
         public string CustomName { get; set; }
         public Gender Gender { get; set; }
+        public ReplyKeyboardMarkup CurrentMenu { get; set; }
     }
 
     public enum Gender

@@ -2,35 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using sex_app.Exception;
-using sex_app.Models;
-using Telegram.Bot;
+using sex_app.Exceptions;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 
 namespace sex_app.Service
 {
-    public class BotCommand<T1, T2, TResult>
+    public class BotCommand<TI, TP, TResult>
     {
-        private readonly Func<T1, T2, TResult> _command;
+        private readonly Func<TI, TP, TResult> _command;
 
         public string Text { get; }
 
-        public BotCommand(Func<T1, T2, TResult> command, string commandText)
+        public BotCommand(Func<TI, TP, TResult> command, string commandText)
         {
             _command = command;
             Text = commandText;
         }
 
-        public TResult Execute(T1 chatId, T2 info)
+        public TResult Execute(TI messageEvent, TP paramList)
         {
-            return _command(chatId, info);
+            return _command(messageEvent, paramList);
         }
     }
 
-    public class ListCommands<T1, T2, TResult> : List<BotCommand<T1, T2, TResult>>
+    public class ListCommands<TI, TP, TResult> : List<BotCommand<TI, TP, TResult>>
     {
-        public BotCommand<T1, T2, TResult> this[string command]
+        public BotCommand<TI, TP, TResult> this[string command]
         {
             get { return this.FirstOrDefault(x => x.Text == command || command.Contains(x.Text)); }
         }
@@ -38,32 +36,32 @@ namespace sex_app.Service
 
     public class CommandService
     {
-        private static readonly ListCommands<long, MessageEventArgs, Task> BotCommands = new();
+        private static readonly ListCommands<MessageEventArgs, string[], Task> BotCommands = new();
         private static readonly UserService UserService = new();
-        private static readonly MenuService MenuService = new();
         private static MyTelegramBotClient _botClient;
 
         public static void InitCommands(MyTelegramBotClient botClient)
         {
             _botClient = botClient;
 
-            BotCommands.Add(new BotCommand<long, MessageEventArgs, Task>(
-                async (chatId, e) =>
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, paramList) =>
                 {
+                    var chatId = e.Message.Chat.Id;
                     await UserService.AddUser(e.Message.Chat);
                     // await _botClient.SendTextMessageAsync(chatId, "Выбери пол", replyMarkup: MenuService.GetSelectGender());
                     await _botClient.SendTextMessageAsync(chatId, $"Здравствуй, *{e.Message.Chat.Username}*\n" +
                                                                   $"Отправь своей половинке этот код:",
                         ParseMode.Markdown);
-                    
+
                     await UserService.AddUser(e.Message.Chat);
                     await _botClient.SendTextMessageAsync(chatId, $"/couple *{chatId}*", ParseMode.Markdown);
                 }, "/start"));
 
-            BotCommands.Add(new BotCommand<long, MessageEventArgs, Task>(async (chatId, e) =>
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, paramList) =>
             {
-                var text = e.Message.Text.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-                if (text.Length < 2 || !long.TryParse(text[1], out var id)) return;
+                var chatId = e.Message.Chat.Id;
+                if (paramList.Length < 2 || !long.TryParse(paramList[1], out var id)) return;
 
                 var (coupleId, result) = await UserService.AddCouple(id, chatId);
                 switch (result)
@@ -82,27 +80,30 @@ namespace sex_app.Service
 
                         await _botClient.SendTextMessageAsync(usersOk.Select(x => x.Id), "Добавлена пара:\n" +
                             $"‣ *{usersOk[0].UserName}*\n" +
-                            $"‣ *{usersOk[1].UserName}*", ParseMode.Markdown);
+                            $"‣ *{usersOk[1].UserName}*", ParseMode.Markdown, replyMarkup: MenuService.GetStartMenu());
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }, "/couple"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, paramList) =>
+            {
+                await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "123", replyMarkup: MenuService.SendMenu("fsd"));
+            }, "/test1"));
         }
 
-        public static async Task Execute(long chatId, MessageEventArgs e)
+        public static async Task Execute(MessageEventArgs e, string[] paramList)
         {
             try
             {
                 await Task.Delay(100);
-                var message = e.Message.Text;
-
-                if (message.Contains("/"))
-                {
-                    await BotCommands[message].Execute(chatId, e);
-                }
+                if (paramList[0].Contains("/"))
+                    await BotCommands[paramList[0]].Execute(e, paramList);
+                
+                await UserService.GetMenu(e.Message.Chat.Id, paramList[0]);
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
             }

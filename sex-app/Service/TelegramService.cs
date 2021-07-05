@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Telegram.Bot;
 using Telegram.Bot.Args;
 
 namespace sex_app.Service
@@ -20,13 +18,14 @@ namespace sex_app.Service
         {
             _botClient.StartReceiving();
             _botClient.OnMessage += OnTelegramMessage;
-            
+
+            MenuService.Init();
             CommandService.InitCommands(_botClient);
         }
 
         private static async void OnTelegramMessage(object sender, MessageEventArgs e)
         {
-            await CommandService.Execute(e.Message.Chat.Id, e);
+            await CommandService.Execute(e, e.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Console.WriteLine(e.Message.Chat.Id);
         }
     }

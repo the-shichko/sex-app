@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using sex_app.Exception;
+using sex_app.Exceptions;
 using sex_app.Models;
 using Telegram.Bot.Types;
 using File = System.IO.File;
@@ -13,6 +13,9 @@ namespace sex_app.Service
 {
     public class UserService
     {
+        private const string PathUsers = "Data\\users.json";
+        private const string PathCouples = "Data\\couples.json";
+
         public UserService()
         {
             var (users, couples) = GetSessionData().GetAwaiter().GetResult();
@@ -21,8 +24,8 @@ namespace sex_app.Service
             ApplicationUsers = users;
         }
 
-        public ApplicationUsers ApplicationUsers { get; }
-        public ApplicationCouples ApplicationCouples { get; }
+        private ApplicationUsers ApplicationUsers { get; }
+        private ApplicationCouples ApplicationCouples { get; }
 
         public async Task<(Guid?, CoupleResult)> AddCouple(long firstId, long secondId)
         {
@@ -51,7 +54,8 @@ namespace sex_app.Service
                 ApplicationUsers.Add(new ApplicationUser
                 {
                     Id = userChat.Id,
-                    UserName = userChat.Username ?? userChat.FirstName
+                    UserName = userChat.Username ?? userChat.FirstName,
+                    CurrentMenu = MenuService.GetStartMenu()
                 });
                 await SaveSession();
             }
@@ -71,24 +75,31 @@ namespace sex_app.Service
         private async Task SaveSession()
         {
             var jsonUsers = JsonConvert.SerializeObject(ApplicationUsers);
-            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\users.json", jsonUsers);
+            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\{PathUsers}", jsonUsers);
 
             var jsonCouples = JsonConvert.SerializeObject(ApplicationCouples);
-            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\couples.json", jsonCouples);
+            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\{PathCouples}", jsonCouples);
         }
 
         private static async Task<(ApplicationUsers, ApplicationCouples)> GetSessionData()
         {
-            var users = File.Exists($"{Directory.GetCurrentDirectory()}\\users.json")
-                ? JsonConvert.DeserializeObject<ApplicationUsers>(
-                    await File.ReadAllTextAsync($"{Directory.GetCurrentDirectory()}\\users.json"))
-                : new ApplicationUsers();
+            var users = JsonConvert.DeserializeObject<ApplicationUsers>(
+                await File.ReadAllTextAsync($"{Directory.GetCurrentDirectory()}\\{PathUsers}"));
 
-            var couples = File.Exists($"{Directory.GetCurrentDirectory()}\\couples.json")
-                ? JsonConvert.DeserializeObject<ApplicationCouples>(
-                    await File.ReadAllTextAsync($"{Directory.GetCurrentDirectory()}\\couples.json"))
-                : new ApplicationCouples();
+            var couples = JsonConvert.DeserializeObject<ApplicationCouples>(
+                await File.ReadAllTextAsync($"{Directory.GetCurrentDirectory()}\\{PathCouples}"));
+
             return (users, couples);
+        }
+
+        public async Task GetMenu(long chatId, string clickedText)
+        {
+            var userKeyboardMarkup = ApplicationUsers[chatId].CurrentMenu;
+
+            foreach (var keyboardButtons in userKeyboardMarkup.Keyboard)
+            {
+                if ()
+            }
         }
     }
 }

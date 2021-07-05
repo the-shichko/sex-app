@@ -1,4 +1,4 @@
-﻿namespace sex_app.Exception
+﻿namespace sex_app.Exceptions
 {
     public enum CoupleResult
     {
