@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using sex_app.Exceptions;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace sex_app.Service
@@ -30,7 +32,12 @@ namespace sex_app.Service
     {
         public BotCommand<TI, TP, TResult> this[string command]
         {
-            get { return this.FirstOrDefault(x => x.Text == command || command.StartsWith(x.Text)); }
+            get
+            {
+                return this.FirstOrDefault(x =>
+                           string.Equals(x.Text, command, StringComparison.CurrentCultureIgnoreCase)) ??
+                       this.FirstOrDefault(x => command.ToLower().StartsWith(x.Text.ToLower()));
+            }
         }
     }
 
@@ -49,12 +56,11 @@ namespace sex_app.Service
                 {
                     var chatId = e.Message.Chat.Id;
                     await UserService.AddUser(e.Message.Chat);
+
                     // await _botClient.SendTextMessageAsync(chatId, "Выбери пол", replyMarkup: MenuService.GetSelectGender());
                     await _botClient.SendTextMessageAsync(chatId, $"Здравствуй, *{e.Message.Chat.Username}*\n" +
                                                                   $"Отправь своей половинке этот код:",
                         ParseMode.Markdown);
-
-                    await UserService.AddUser(e.Message.Chat);
                     await _botClient.SendTextMessageAsync(chatId, $"/couple *{chatId}*", ParseMode.Markdown);
                 }, "/start"));
 
@@ -86,13 +92,32 @@ namespace sex_app.Service
                         throw new ArgumentOutOfRangeException();
                 }
             }, "/couple"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
+            {
+                var chatId = e.Message.Chat.Id;
+                var couple = UserService.GetCouple(chatId);
+
+                if (couple != null)
+                    await _botClient.SendTextMessageAsync(chatId,
+                        $"About: \n{couple.First().UserName} & {couple.Last().UserName} ❤");
+            }, "/coupleInfo"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
+            {
+                var chatId = e.Message.Chat.Id;
+                var couple = UserService.GetCouple(chatId);
+
+                var partner = couple.FirstOrDefault(x => x.Id != chatId);
+                if (partner != null)
+                    await _botClient.SendTextMessageAsync(partner.Id, "Утро доброе)");
+            }, "/hello"));
         }
 
         public static async Task Execute(MessageEventArgs e, string[] paramList)
         {
             try
             {
-                await Task.Delay(100);
                 if (paramList[0].Contains("/"))
                 {
                     var commandModel = BotCommands[paramList[0]];
@@ -100,8 +125,9 @@ namespace sex_app.Service
                         await commandModel.Execute(e, paramList.Skip(1).ToArray());
                 }
 
-                await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "test",
-                    replyMarkup: await UserService.GetMenuForUser(e.Message.Chat.Id, paramList[0]));
+                var (path, menu) = await UserService.GetMenuForUser(e.Message.Chat.Id, paramList[0]);
+                await _botClient.SendTextMessageAsync(e.Message.Chat.Id, path,
+                    replyMarkup: menu);
             }
             catch (Exception exception)
             {

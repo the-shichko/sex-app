@@ -8,8 +8,7 @@ namespace sex_app
     {
         static async Task Main(string[] args)
         {
-            var bot = new TelegramService();
-            bot.Start();
+            _ = new TelegramService();
 
             Console.WriteLine("Working...");
             await Task.Delay(-1);

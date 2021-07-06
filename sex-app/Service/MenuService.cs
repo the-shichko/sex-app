@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using sex_app.Models;
 
 namespace sex_app.Service
@@ -11,27 +12,41 @@ namespace sex_app.Service
         {
             MainMenu = new CustomReplyReplyKeyboardMarkup
             {
+                Title = "Main",
                 Keyboard = new IEnumerable<CustomKeyboardButton>[]
                 {
                     new CustomKeyboardButton[]
                     {
-                        new("/test1", new CustomReplyReplyKeyboardMarkup
+                        new("partner", new CustomReplyReplyKeyboardMarkup
                         {
+                            Title = "Partner",
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
                             {
                                 new CustomKeyboardButton[]
                                 {
-                                    new("/test3"),
-                                    new("/test4"),
+                                    new("/hello"),
+                                    new("назад", true)
+                                }
+                            }
+                        }),
+                        new("info", new CustomReplyReplyKeyboardMarkup
+                        {
+                            Title = "Info",
+                            Keyboard = new IEnumerable<CustomKeyboardButton>[]
+                            {
+                                new CustomKeyboardButton[]
+                                {
+                                    new("/coupleInfo"),
                                     new("назад", true),
                                 }
                             },
+                            ResizeKeyboard = true
                         }),
-                        new("/test2")
                     }
-                }
+                },
+                ResizeKeyboard = true
             };
-            
+
             SetPrev(MainMenu);
         }
 
@@ -54,6 +69,22 @@ namespace sex_app.Service
         public static CustomReplyReplyKeyboardMarkup GetStartMenu()
         {
             return MainMenu;
+        }
+
+        public static string GetPath(CustomReplyReplyKeyboardMarkup currentMenu)
+        {
+            if (currentMenu == null)
+                return null;
+            foreach (var keyboards in currentMenu.Keyboard)
+            {
+                foreach (var button in keyboards)
+                {
+                    if (button.ToBack)
+                        return $"{GetPath(button.Prev)} > {currentMenu.Title}";
+                }
+            }
+
+            return "Main";
         }
 
         // public InlineKeyboardMarkup GetSelectGender()

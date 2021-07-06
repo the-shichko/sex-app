@@ -93,12 +93,12 @@ namespace sex_app.Service
         }
 
 
-        public async Task<CustomReplyReplyKeyboardMarkup> GetMenuForUser(long chatId, string clickedText)
+        public async Task<(string, CustomReplyReplyKeyboardMarkup)> GetMenuForUser(long chatId, string clickedText)
         {
             var replyReplyKeyboardMarkup = FindUserMenuRecursion(chatId, clickedText);
             ApplicationUsers[chatId].CurrentMenu = replyReplyKeyboardMarkup ?? ApplicationUsers[chatId].CurrentMenu;
             await SaveSession();
-            return ApplicationUsers[chatId].CurrentMenu;
+            return (MenuService.GetPath(ApplicationUsers[chatId].CurrentMenu), ApplicationUsers[chatId].CurrentMenu);
         }
 
         private CustomReplyReplyKeyboardMarkup FindUserMenuRecursion(long chatId, string clickedText)
@@ -112,6 +112,20 @@ namespace sex_app.Service
                 from keyboardButton in keyboardButtons
                 where keyboardButton.Text == clickedText
                 select keyboardButton.Click()).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get users in couple
+        /// </summary>
+        /// <param name="partnerId">Any partner's Id</param>
+        /// <returns><see cref="ApplicationUsers"/></returns>
+        public ApplicationUsers GetCouple(long partnerId)
+        {
+            var couple = ApplicationCouples[partnerId];
+
+            return couple != null
+                ? new ApplicationUsers(ApplicationUsers[couple.FirstPartner], ApplicationUsers[couple.SecondPartner])
+                : null;
         }
     }
 }

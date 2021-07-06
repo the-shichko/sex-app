@@ -12,10 +12,12 @@ namespace sex_app.Models
         public IEnumerable<IEnumerable<CustomKeyboardButton>> Keyboard { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public bool ResizeKeyboard { get; set; }
+        public bool ResizeKeyboard { get; set; } = true;
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool OneTimeKeyboard { get; set; }
+        
+        public string Title { get; set; }
 
         public CustomReplyReplyKeyboardMarkup()
         {
@@ -65,13 +67,11 @@ namespace sex_app.Models
     {
         public CustomKeyboardButton(string text, CustomReplyReplyKeyboardMarkup next) : base(text)
         {
-            Id = Guid.NewGuid();
             Next = next;
         }
 
         public CustomKeyboardButton(string text, bool toBack = false) : base(text)
         {
-            Id = Guid.NewGuid();
             ToBack = toBack;
         }
 
@@ -79,7 +79,6 @@ namespace sex_app.Models
         {
         }
 
-        public Guid Id { get; set; }
         public CustomReplyReplyKeyboardMarkup Next { get; set; }
         public CustomReplyReplyKeyboardMarkup Prev { get; set; }
         public bool ToBack { get; set; }
