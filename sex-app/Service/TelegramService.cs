@@ -7,7 +7,6 @@ namespace sex_app.Service
     {
         private const string Token = "1714106940:AAGcEPU6IOVlIb5oOg4YaN6aJDtkbFS9MZg";
         private readonly MyTelegramBotClient _botClient;
-        private static readonly CommandService CommandService = new();
 
         public TelegramService(string token = null)
         {
@@ -26,7 +25,6 @@ namespace sex_app.Service
         private static async void OnTelegramMessage(object sender, MessageEventArgs e)
         {
             await CommandService.Execute(e, e.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries));
-            Console.WriteLine(e.Message.Chat.Id);
         }
     }
 }

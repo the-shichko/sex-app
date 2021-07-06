@@ -92,14 +92,26 @@ namespace sex_app.Service
             return (users, couples);
         }
 
-        public async Task GetMenu(long chatId, string clickedText)
+
+        public async Task<CustomReplyReplyKeyboardMarkup> GetMenuForUser(long chatId, string clickedText)
+        {
+            var replyReplyKeyboardMarkup = FindUserMenuRecursion(chatId, clickedText);
+            ApplicationUsers[chatId].CurrentMenu = replyReplyKeyboardMarkup ?? ApplicationUsers[chatId].CurrentMenu;
+            await SaveSession();
+            return ApplicationUsers[chatId].CurrentMenu;
+        }
+
+        private CustomReplyReplyKeyboardMarkup FindUserMenuRecursion(long chatId, string clickedText)
         {
             var userKeyboardMarkup = ApplicationUsers[chatId].CurrentMenu;
 
-            foreach (var keyboardButtons in userKeyboardMarkup.Keyboard)
-            {
-                if ()
-            }
+            if (userKeyboardMarkup == null)
+                return MenuService.GetStartMenu();
+
+            return (from keyboardButtons in userKeyboardMarkup.Keyboard
+                from keyboardButton in keyboardButtons
+                where keyboardButton.Text == clickedText
+                select keyboardButton.Click()).FirstOrDefault();
         }
     }
 }

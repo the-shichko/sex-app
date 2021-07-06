@@ -1,41 +1,57 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using sex_app.Models;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace sex_app.Service
 {
     public static class MenuService
     {
-        private static ReplyKeyboardMarkup MainMenu { get; set; }
+        private static CustomReplyReplyKeyboardMarkup MainMenu { get; set; }
 
         public static void Init()
         {
-            MainMenu = new ReplyKeyboardMarkup
+            MainMenu = new CustomReplyReplyKeyboardMarkup
             {
                 Keyboard = new IEnumerable<CustomKeyboardButton>[]
                 {
                     new CustomKeyboardButton[]
                     {
-                        new("/test1", new ReplyKeyboardMarkup
+                        new("/test1", new CustomReplyReplyKeyboardMarkup
                         {
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
                             {
                                 new CustomKeyboardButton[]
                                 {
-                                    new("/test3", null),
-                                    new("/test4", null),
-                                    new("назад", null),
+                                    new("/test3"),
+                                    new("/test4"),
+                                    new("назад", true),
                                 }
                             },
                         }),
-                        new("/test2", null)
+                        new("/test2")
                     }
                 }
             };
+            
+            SetPrev(MainMenu);
         }
 
-        public static ReplyKeyboardMarkup GetStartMenu()
+        private static void SetPrev(CustomReplyReplyKeyboardMarkup baseMenu,
+            CustomReplyReplyKeyboardMarkup parent = null)
+        {
+            if (baseMenu == null) return;
+            foreach (var keyboards in baseMenu.Keyboard)
+            {
+                foreach (var button in keyboards)
+                {
+                    if (button.ToBack)
+                        button.Prev = parent;
+
+                    SetPrev(button.Next, baseMenu);
+                }
+            }
+        }
+
+        public static CustomReplyReplyKeyboardMarkup GetStartMenu()
         {
             return MainMenu;
         }
@@ -53,10 +69,5 @@ namespace sex_app.Service
         //         }
         //     });
         // }
-
-        public static async Task GetMenu(long chatId, string clickedText)
-        {
-            var 
-        }
     }
 }

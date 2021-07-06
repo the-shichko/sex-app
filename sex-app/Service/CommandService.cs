@@ -30,11 +30,11 @@ namespace sex_app.Service
     {
         public BotCommand<TI, TP, TResult> this[string command]
         {
-            get { return this.FirstOrDefault(x => x.Text == command || command.Contains(x.Text)); }
+            get { return this.FirstOrDefault(x => x.Text == command || command.StartsWith(x.Text)); }
         }
     }
 
-    public class CommandService
+    public static class CommandService
     {
         private static readonly ListCommands<MessageEventArgs, string[], Task> BotCommands = new();
         private static readonly UserService UserService = new();
@@ -45,7 +45,7 @@ namespace sex_app.Service
             _botClient = botClient;
 
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, paramList) =>
+                async (e, _) =>
                 {
                     var chatId = e.Message.Chat.Id;
                     await UserService.AddUser(e.Message.Chat);
@@ -61,7 +61,7 @@ namespace sex_app.Service
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, paramList) =>
             {
                 var chatId = e.Message.Chat.Id;
-                if (paramList.Length < 2 || !long.TryParse(paramList[1], out var id)) return;
+                if (paramList.Length == 0 || !long.TryParse(paramList[0], out var id)) return;
 
                 var (coupleId, result) = await UserService.AddCouple(id, chatId);
                 switch (result)
@@ -86,11 +86,6 @@ namespace sex_app.Service
                         throw new ArgumentOutOfRangeException();
                 }
             }, "/couple"));
-            
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, paramList) =>
-            {
-                await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "123", replyMarkup: MenuService.SendMenu("fsd"));
-            }, "/test1"));
         }
 
         public static async Task Execute(MessageEventArgs e, string[] paramList)
@@ -99,9 +94,14 @@ namespace sex_app.Service
             {
                 await Task.Delay(100);
                 if (paramList[0].Contains("/"))
-                    await BotCommands[paramList[0]].Execute(e, paramList);
-                
-                await UserService.GetMenu(e.Message.Chat.Id, paramList[0]);
+                {
+                    var commandModel = BotCommands[paramList[0]];
+                    if (commandModel != null)
+                        await commandModel.Execute(e, paramList.Skip(1).ToArray());
+                }
+
+                await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "test",
+                    replyMarkup: await UserService.GetMenuForUser(e.Message.Chat.Id, paramList[0]));
             }
             catch (Exception exception)
             {
