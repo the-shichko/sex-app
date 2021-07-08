@@ -301,12 +301,291 @@ namespace sex_app.Models
                     },
                     EyeContact = BaseBool.No,
                     LevelPenetration = LevelPenetration.Without,
-                    FileName = "169.png",
+                    FileName = "170.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                    {
+                        AdditionalCaress.CrushHerAss, AdditionalCaress.PlayWithHerAnus
+                    }
+                },
+                new PositionItem
+                {
+                    Title = "Сфинкс",
+                    Activity = Activity.Men,
+                    Level = Level.Mild,
+                    Categories = new List<Category>
+                    {
+                        Category.Cunnilingus, Category.OralSex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.WomenOnTop
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.Clitoris
+                    },
+                    EyeContact = BaseBool.MayBe,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "181.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                    {
+                        AdditionalCaress.CrushHerAss, AdditionalCaress.PlayWithHerAnus, AdditionalCaress.CrushHerBoobs
+                    }
+                },
+                new PositionItem
+                {
+                    Title = "Кулон",
+                    Activity = Activity.Both,
+                    Level = Level.Easy,
+                    Categories = new List<Category>
+                    {
+                        Category.Cunnilingus, Category.OralSex, Category.Position69, Category.Blowjob
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.WomenOnTop, Location.LyingDown, Location.Reverse
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.Clitoris
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "182.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                    {
+                        AdditionalCaress.CrushHerAss, AdditionalCaress.PlayWithHerAnus
+                    }
+                },
+                new PositionItem
+                {
+                    Title = "Маяк",
+                    Activity = Activity.Men,
+                    Level = Level.Complicated,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.MenOnTop, Location.MenBehind, Location.Reverse, Location.StandingUp
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.DotP
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Middle,
+                    FileName = "186.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                    {
+                        AdditionalCaress.CrushHerAss
+                    }
+                },
+                new PositionItem
+                {
+                    Title = "Пиала",
+                    Activity = Activity.Men,
+                    Level = Level.Complicated,
+                    Categories = new List<Category>
+                    {
+                        Category.Cunnilingus, Category.OralSex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.MenOnTop, Location.LyingDown
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.Clitoris
+                    },
+                    EyeContact = BaseBool.MayBe,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "192.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                    {
+                        AdditionalCaress.CrushHerAss, AdditionalCaress.PlayWithHerAnus, AdditionalCaress.CrushHerBoobs
+                    }
+                },
+                new PositionItem
+                {
+                    Title = "Торшер",
+                    Activity = Activity.Women,
+                    Level = Level.Mild,
+                    Categories = new List<Category>
+                    {
+                        Category.Blowjob, Category.OralSex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.Sitting
+                    },
+                    Stimulations = new List<Stimulation>(),
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "193.png",
                     AdditionalCaresses = new List<AdditionalCaress>()
                     {
                         AdditionalCaress.CrushHerAss, AdditionalCaress.CrushHerBoobs
                     }
-                }
+                },
+                new PositionItem
+                {
+                    Title = "Чайный пакетик",
+                    Activity = Activity.Women,
+                    Level = Level.Mild,
+                    Categories = new List<Category>
+                    {
+                        Category.Blowjob, Category.OralSex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.StandingUp
+                    },
+                    Stimulations = new List<Stimulation>(),
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "203.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                },
+                new PositionItem
+                {
+                    Title = "Распятие",
+                    Activity = Activity.Both,
+                    Level = Level.Complicated,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.WomenOnTop, Location.MenBehind, Location.Sitting
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.DotA, Stimulation.DotG
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.High,
+                    FileName = "206.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                },
+                new PositionItem
+                {
+                    Title = "Виолончель",
+                    Activity = Activity.Men,
+                    Level = Level.Complicated,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.MenBehind, Location.OnKnees
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.DotP
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Middle,
+                    FileName = "208.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                },
+                new PositionItem
+                {
+                    Title = "Залощница",
+                    Activity = Activity.Men,
+                    Level = Level.Easy,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.DoggyStyle, Location.MenBehind, Location.StandingUp
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.DotG, Stimulation.DotP
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.High,
+                    FileName = "210.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                },
+                new PositionItem
+                {
+                    Title = "Колонна",
+                    Activity = Activity.Men,
+                    Level = Level.Mild,
+                    Categories = new List<Category>
+                    {
+                        Category.Cunnilingus, Category.OralSex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.StandingUp
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.Clitoris
+                    },
+                    EyeContact = BaseBool.MayBe,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "212.png",
+                    AdditionalCaresses = new List<AdditionalCaress>
+                    {
+                        AdditionalCaress.CrushHerBoobs, AdditionalCaress.CrushHerAss
+                    }
+                },
+                new PositionItem
+                {
+                    Title = "Шишка",
+                    Activity = Activity.Men,
+                    Level = Level.Mild,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.LyingDown, Location.MenOnTop, Location.MenBehind, Location.Reverse
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.DotA, Stimulation.DotG
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "221.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                },
+                new PositionItem
+                {
+                    Title = "Орхидея",
+                    Activity = Activity.Men,
+                    Level = Level.Complicated,
+                    Categories = new List<Category>
+                    {
+                        Category.Cunnilingus, Category.OralSex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.StandingUp
+                    },
+                    Stimulations = new List<Stimulation>
+                    {
+                        Stimulation.Clitoris
+                    },
+                    EyeContact = BaseBool.No,
+                    LevelPenetration = LevelPenetration.Without,
+                    FileName = "222.png",
+                    AdditionalCaresses = new List<AdditionalCaress>
+                    {
+                        AdditionalCaress.CrushHerAss
+                    }
+                },
             });
         }
 

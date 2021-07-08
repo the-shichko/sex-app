@@ -23,15 +23,21 @@ namespace sex_app.Enums
         [Display(Name = "На коленях")]
         OnKnees,
         [Display(Name = "Сидя")]
-        Sitting
+        Sitting,
+        [Display(Name = "Doggy style")]
+        DoggyStyle
     }
 
     public enum Stimulation
     {
-        [Display(Name = "Точка Р")]
+        [Display(Name = "Точка P")]
         DotP,
         [Display(Name = "Клитор")]
-        Clitoris
+        Clitoris,
+        [Display(Name = "Точка A")]
+        DotA,
+        [Display(Name = "Точка G")]
+        DotG
     }
 
     public enum LevelPenetration
@@ -40,8 +46,9 @@ namespace sex_app.Enums
         Without,
         [Display(Name = "Мелкое")]
         Petty,
-        Low,
+        [Display(Name = "Среднее")]
         Middle,
+        [Display(Name = "Глубокое")]
         High
     }
 
