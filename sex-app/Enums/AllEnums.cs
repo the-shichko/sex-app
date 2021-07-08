@@ -25,7 +25,9 @@ namespace sex_app.Enums
         [Display(Name = "Сидя")]
         Sitting,
         [Display(Name = "Doggy style")]
-        DoggyStyle
+        DoggyStyle,
+        [Display(Name = "Ноги на плечах")]
+        FeetOnShoulders
     }
 
     public enum Stimulation
@@ -63,7 +65,9 @@ namespace sex_app.Enums
         [Display(Name = "Целоваться")]
         Kiss,
         [Display(Name = "Обниматься")]
-        ToCuddle
+        ToCuddle,
+        [Display(Name = "Целовать грудь")]
+        KissBoobs
     }
 
     public enum Activity
