@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using sex_app.Enums;
 using sex_app.Exceptions;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -131,14 +132,19 @@ namespace sex_app.Service
             {
                 await SendImagePosition(e.Message.Chat.Id, Category.Sex);
             }, "/sex"));
-
-            static async Task SendImagePosition(long chatId, Category category)
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
             {
-                var mediaPath = SexService.GetRandomPosition(category);
+                await SendImagePosition(e.Message.Chat.Id);
+            }, "/fullRandom"));
+
+            static async Task SendImagePosition(long chatId, Category? category = null)
+            {
+                var (message, mediaPath) = SexService.GetRandomPositionNew(category);
 
                 await using var stream = File.Open(mediaPath, FileMode.Open);
                 await _botClient.SendPhotoAsync(chatId,
-                    new InputMedia(stream, "test.png"));
+                    new InputMedia(stream, "test.png"), message, ParseMode.Markdown);
             }
         }
 

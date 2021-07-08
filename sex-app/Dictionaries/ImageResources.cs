@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using sex_app.Service;
+using sex_app.Enums;
 
 namespace sex_app.Dictionaries
 {
