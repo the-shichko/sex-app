@@ -61,7 +61,9 @@ namespace sex_app.Enums
         [Display(Name = "Мять её грудь")]
         CrushHerBoobs,
         [Display(Name = "Целоваться")]
-        Kiss
+        Kiss,
+        [Display(Name = "Обниматься")]
+        ToCuddle
     }
 
     public enum Activity
