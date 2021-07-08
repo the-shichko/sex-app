@@ -58,7 +58,7 @@ namespace sex_app.Service
                 {
                     Id = userChat.Id,
                     UserName = userChat.Username ?? userChat.FirstName,
-                    CurrentMenu = MenuService.GetStartMenu()
+                    CurrentMenuTitle = "Main"
                 });
                 await SaveSession();
             }
@@ -77,7 +77,12 @@ namespace sex_app.Service
 
         private async Task SaveSession()
         {
-            var jsonUsers = JsonConvert.SerializeObject(ApplicationUsers);
+            var jsonUsers = JsonConvert.SerializeObject(ApplicationUsers, Formatting.Indented,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                });
             await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\{PathUsers}", jsonUsers);
 
             var jsonCouples = JsonConvert.SerializeObject(ApplicationCouples);
@@ -99,14 +104,17 @@ namespace sex_app.Service
         public async Task<(string, CustomReplyReplyKeyboardMarkup)> GetMenuForUser(long chatId, string clickedText)
         {
             var replyReplyKeyboardMarkup = FindUserMenuRecursion(chatId, clickedText);
-            ApplicationUsers[chatId].CurrentMenu = replyReplyKeyboardMarkup ?? ApplicationUsers[chatId].CurrentMenu;
+            ApplicationUsers[chatId].CurrentMenuTitle =
+                replyReplyKeyboardMarkup?.Title ?? ApplicationUsers[chatId].CurrentMenuTitle;
             await SaveSession();
-            return (MenuService.GetPath(ApplicationUsers[chatId].CurrentMenu), ApplicationUsers[chatId].CurrentMenu);
+
+            var menu = MenuService.GetByTitle(ApplicationUsers[chatId].CurrentMenuTitle, MenuService.GetStartMenu());
+            return (MenuService.GetPath(menu), menu);
         }
 
         private CustomReplyReplyKeyboardMarkup FindUserMenuRecursion(long chatId, string clickedText)
         {
-            var userKeyboardMarkup = ApplicationUsers[chatId].CurrentMenu;
+            var userKeyboardMarkup = MenuService.GetByTitle(ApplicationUsers[chatId].CurrentMenuTitle, MenuService.GetStartMenu());
 
             if (userKeyboardMarkup == null)
                 return MenuService.GetStartMenu();

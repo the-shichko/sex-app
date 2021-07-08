@@ -34,7 +34,7 @@ namespace sex_app.Models
 
         public string CustomName { get; set; }
         public Gender Gender { get; set; }
-        public CustomReplyReplyKeyboardMarkup CurrentMenu { get; set; }
+        public string CurrentMenuTitle { get; set; }
         public string Photo { get; set; }
     }
 

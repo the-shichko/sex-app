@@ -109,14 +109,37 @@ namespace sex_app.Service
 
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
             {
-                var chatId = e.Message.Chat.Id;
+                await SendImagePosition(e.Message.Chat.Id, Category.Cunnilingus);
+            }, "/cunnilingus"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
+            {
+                await SendImagePosition(e.Message.Chat.Id, Category.Blowjob);
+            }, "/blowjob"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
+            {
+                await SendImagePosition(e.Message.Chat.Id, Category.Position69);
+            }, "/69"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
+            {
+                await SendImagePosition(e.Message.Chat.Id, Category.OralSex);
+            }, "/oralSex"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
+            {
+                await SendImagePosition(e.Message.Chat.Id, Category.Sex);
+            }, "/sex"));
 
-                var mediaPath = SexService.GetRandomPosition(TypePosition.Cunnilingus);
+            static async Task SendImagePosition(long chatId, Category category)
+            {
+                var mediaPath = SexService.GetRandomPosition(category);
 
-                using var stream = File.Open(mediaPath, FileMode.Open);
+                await using var stream = File.Open(mediaPath, FileMode.Open);
                 await _botClient.SendPhotoAsync(chatId,
                     new InputMedia(stream, "test.png"));
-            }, "/cunnilingus"));
+            }
         }
 
         public static async Task Execute(MessageEventArgs e, string[] paramList)

@@ -21,6 +21,9 @@ namespace sex_app.Service
         private static async void OnTelegramMessage(object sender, MessageEventArgs e)
         {
             await CommandService.Execute(e, e.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries));
+            Console.WriteLine($"{e.Message.Text} - @{e.Message.Chat.Username ?? e.Message.Chat.FirstName}\n" +
+                              $"\t chatId: {e.Message.Chat.Id}\n" +
+                              $"\t date: {DateTime.Now:dd.MM.yyyy hh:mm}");
         }
     }
 }

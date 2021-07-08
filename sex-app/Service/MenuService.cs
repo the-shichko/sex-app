@@ -17,9 +17,9 @@ namespace sex_app.Service
                 {
                     new CustomKeyboardButton[]
                     {
-                        new("sex", new CustomReplyReplyKeyboardMarkup
+                        new("💑", new CustomReplyReplyKeyboardMarkup
                         {
-                            Title = "Sex",
+                            Title = "💑",
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
                             {
                                 new CustomKeyboardButton[]
@@ -32,7 +32,14 @@ namespace sex_app.Service
                                             new CustomKeyboardButton[]
                                             {
                                                 new("/cunnilingus"),
-                                                new ("назад", true)
+                                                new("/69"),
+                                                new ("/blowjob")
+                                            },
+                                            new CustomKeyboardButton[]
+                                            {
+                                                new("/oralSex"),
+                                                new("/sex"),
+                                                new("назад", true)
                                             }
                                         }
                                     }),
@@ -40,7 +47,7 @@ namespace sex_app.Service
                                 },
                                 new CustomKeyboardButton[]
                                 {
-                                    new ("назад", true)
+                                    new("назад", true)
                                 }
                             }
                         }),
@@ -79,6 +86,19 @@ namespace sex_app.Service
                     SetPrev(button.Next, baseMenu);
                 }
             }
+        }
+
+        public static CustomReplyReplyKeyboardMarkup GetByTitle(string title, CustomReplyReplyKeyboardMarkup baseMenu)
+        {
+            if (baseMenu == null)
+                return null;
+            if (baseMenu.Title == title)
+                return baseMenu;
+
+            return (from keyboards in baseMenu.Keyboard
+                    from button in keyboards
+                    select GetByTitle(title, button.Next))
+                .FirstOrDefault();
         }
 
         public static CustomReplyReplyKeyboardMarkup GetStartMenu()
