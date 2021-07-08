@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using sex_app.Enums;
 using sex_app.Exceptions;
@@ -141,7 +142,6 @@ namespace sex_app.Service
             static async Task SendImagePosition(long chatId, Category? category = null)
             {
                 var (message, mediaPath) = SexService.GetRandomPositionNew(category);
-
                 await using var stream = File.Open(mediaPath, FileMode.Open);
                 await _botClient.SendPhotoAsync(chatId,
                     new InputMedia(stream, "test.png"), message, ParseMode.Markdown);

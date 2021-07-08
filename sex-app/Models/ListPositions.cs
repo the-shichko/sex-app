@@ -907,6 +907,28 @@ namespace sex_app.Models
                         AdditionalCaress.Kiss
                     }
                 },
+                new PositionItem
+                {
+                    Title = "Офицерская",
+                    Activity = Activity.Men,
+                    Level = Level.Mild,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.LyingDown, Location.FaceToFace, Location.MenOnTop, Location.FeetOnShoulders
+                    },
+                    Stimulations = new List<Stimulation>()
+                    {
+                        Stimulation.Clitoris, Stimulation.DotP
+                    },
+                    EyeContact = BaseBool.MayBe,
+                    LevelPenetration = LevelPenetration.High,
+                    FileName = "115.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                },
             });
         }
 

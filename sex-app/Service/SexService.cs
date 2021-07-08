@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using sex_app.Dictionaries;
 using sex_app.Enums;
 using sex_app.Models;
@@ -10,14 +11,14 @@ namespace sex_app.Service
 {
     public static class SexService
     {
-        private static Random _random;
+        private static RandomNumberGenerator _random;
         private static readonly string ResourcesPath = $"{Directory.GetCurrentDirectory()}\\Resources";
         private static ListPositions _listPositions;
         private static List<int> RandomNumber { get; set; }
 
         public static void Init()
         {
-            _random = new Random();
+            _random = RandomNumberGenerator.Create();
             _listPositions = new ListPositions();
             RandomNumber = new List<int>();
         }
@@ -53,12 +54,13 @@ namespace sex_app.Service
 
         private static int CustomRandom(int from, int to)
         {
-            if (RandomNumber.Count > _random.Next(7, 12))
+            
+            if (RandomNumber.Count > RandomNumberGenerator.GetInt32(15, 20))
                 RandomNumber = new List<int>();
 
             while (true)
             {
-                var value = _random.Next(from, to);
+                var value = RandomNumberGenerator.GetInt32(from, to);
                 if (RandomNumber.Contains(value)) continue;
 
                 RandomNumber.Add(value);
