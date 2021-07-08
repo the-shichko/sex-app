@@ -3,7 +3,8 @@
     public enum CoupleResult
     {
         CoupleExist,
-        UserNull,
+        FirstUserNull,
+        SecondUserNull,
         Ok
     }
 }

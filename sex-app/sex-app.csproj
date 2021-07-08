@@ -10,7 +10,10 @@
         <PackageReference Include="Telegram.Bot" Version="15.7.1" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Data\*">
+        <Content Include="Data\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Resources\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

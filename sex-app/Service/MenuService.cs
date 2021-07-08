@@ -17,15 +17,30 @@ namespace sex_app.Service
                 {
                     new CustomKeyboardButton[]
                     {
-                        new("partner", new CustomReplyReplyKeyboardMarkup
+                        new("sex", new CustomReplyReplyKeyboardMarkup
                         {
-                            Title = "Partner",
+                            Title = "Sex",
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
                             {
                                 new CustomKeyboardButton[]
                                 {
-                                    new("/hello"),
-                                    new("назад", true)
+                                    new("categories", new CustomReplyReplyKeyboardMarkup
+                                    {
+                                        Title = "Categories",
+                                        Keyboard = new IEnumerable<CustomKeyboardButton>[]
+                                        {
+                                            new CustomKeyboardButton[]
+                                            {
+                                                new("/cunnilingus"),
+                                                new ("назад", true)
+                                            }
+                                        }
+                                    }),
+                                    new("/fullRandom"),
+                                },
+                                new CustomKeyboardButton[]
+                                {
+                                    new ("назад", true)
                                 }
                             }
                         }),
@@ -86,19 +101,5 @@ namespace sex_app.Service
 
             return "Main";
         }
-
-        // public InlineKeyboardMarkup GetSelectGender()
-        // {
-        //     return new(new[]
-        //     {
-        //         new[]
-        //         {
-        //             InlineKeyboardButton.WithCallbackData($"Мужской",
-        //                 $"/set-gender male"),
-        //             InlineKeyboardButton.WithCallbackData($"Женский",
-        //                 $"/set-gender female")
-        //         }
-        //     });
-        // }
     }
 }

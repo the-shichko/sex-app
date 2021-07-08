@@ -7,6 +7,7 @@ using sex_app.Exceptions;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using File = System.IO.File;
 
 namespace sex_app.Service
 {
@@ -69,7 +70,7 @@ namespace sex_app.Service
                 var chatId = e.Message.Chat.Id;
                 if (paramList.Length == 0 || !long.TryParse(paramList[0], out var id)) return;
 
-                var (coupleId, result) = await UserService.AddCouple(id, chatId);
+                var (coupleId, result) = await UserService.AddCouple(chatId, id);
                 switch (result)
                 {
                     case CoupleResult.CoupleExist:
@@ -78,8 +79,11 @@ namespace sex_app.Service
                                                                       $"‣ *{users[0].UserName}*\n" +
                                                                       $"‣ *{users[1].UserName}*", ParseMode.Markdown);
                         break;
-                    case CoupleResult.UserNull:
-                        await _botClient.SendTextMessageAsync(chatId, "Пользователь не существует.\n");
+                    case CoupleResult.FirstUserNull:
+                        await _botClient.SendTextMessageAsync(chatId, "Войдите в систему (/start)\n");
+                        break;
+                    case CoupleResult.SecondUserNull:
+                        await _botClient.SendTextMessageAsync(chatId, "Пользователь не существует\n");
                         break;
                     case CoupleResult.Ok:
                         var usersOk = UserService.GetUsersByCoupleId(coupleId.Value);
@@ -106,12 +110,13 @@ namespace sex_app.Service
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
             {
                 var chatId = e.Message.Chat.Id;
-                var couple = UserService.GetCouple(chatId);
 
-                var partner = couple.FirstOrDefault(x => x.Id != chatId);
-                if (partner != null)
-                    await _botClient.SendTextMessageAsync(partner.Id, "Утро доброе)");
-            }, "/hello"));
+                var mediaPath = SexService.GetRandomPosition(TypePosition.Cunnilingus);
+
+                using var stream = File.Open(mediaPath, FileMode.Open);
+                await _botClient.SendPhotoAsync(chatId,
+                    new InputMedia(stream, "test.png"));
+            }, "/cunnilingus"));
         }
 
         public static async Task Execute(MessageEventArgs e, string[] paramList)

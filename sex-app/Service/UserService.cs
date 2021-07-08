@@ -29,8 +29,11 @@ namespace sex_app.Service
 
         public async Task<(Guid?, CoupleResult)> AddCouple(long firstId, long secondId)
         {
-            if (ApplicationUsers[firstId] == null || ApplicationUsers[secondId] == null)
-                return (null, CoupleResult.UserNull);
+            if (ApplicationUsers[firstId] == null)
+                return (null, CoupleResult.FirstUserNull);
+
+            if (ApplicationUsers[secondId] == null)
+                return (null, CoupleResult.SecondUserNull);
 
             if (ApplicationCouples[firstId] != null || ApplicationCouples[secondId] != null)
                 return (ApplicationCouples[firstId].Id, CoupleResult.CoupleExist);

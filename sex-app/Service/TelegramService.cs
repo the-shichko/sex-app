@@ -14,6 +14,7 @@ namespace sex_app.Service
             botClient.OnMessage += OnTelegramMessage;
             
             MenuService.Init();
+            SexService.Init();
             CommandService.InitCommands(botClient);
         }
 
