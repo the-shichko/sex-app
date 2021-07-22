@@ -6,7 +6,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace sex_app.Models
 {
-    public class CustomReplyReplyKeyboardMarkup : ReplyMarkupBase
+    public class CustomReplyKeyboardMarkup : ReplyMarkupBase
     {
         [JsonProperty(Required = Required.Always)]
         public IEnumerable<IEnumerable<CustomKeyboardButton>> Keyboard { get; set; }
@@ -19,23 +19,23 @@ namespace sex_app.Models
         
         public string Title { get; set; }
 
-        public CustomReplyReplyKeyboardMarkup()
+        public CustomReplyKeyboardMarkup()
         {
         }
 
-        public CustomReplyReplyKeyboardMarkup(CustomKeyboardButton button)
+        public CustomReplyKeyboardMarkup(CustomKeyboardButton button)
             : this(new[] {button})
         {
         }
 
-        public CustomReplyReplyKeyboardMarkup(IEnumerable<CustomKeyboardButton> keyboardRow,
+        public CustomReplyKeyboardMarkup(IEnumerable<CustomKeyboardButton> keyboardRow,
             bool resizeKeyboard = default,
             bool oneTimeKeyboard = default)
             : this(new[] {keyboardRow}, resizeKeyboard, oneTimeKeyboard)
         {
         }
 
-        public CustomReplyReplyKeyboardMarkup(IEnumerable<IEnumerable<CustomKeyboardButton>> keyboard,
+        public CustomReplyKeyboardMarkup(IEnumerable<IEnumerable<CustomKeyboardButton>> keyboard,
             bool resizeKeyboard = default,
             bool oneTimeKeyboard = default)
         {
@@ -44,20 +44,20 @@ namespace sex_app.Models
             OneTimeKeyboard = oneTimeKeyboard;
         }
 
-        public static implicit operator CustomReplyReplyKeyboardMarkup(string text) =>
+        public static implicit operator CustomReplyKeyboardMarkup(string text) =>
             text == null
                 ? default
-                : new CustomReplyReplyKeyboardMarkup(new[] {new CustomKeyboardButton(text)});
+                : new CustomReplyKeyboardMarkup(new[] {new CustomKeyboardButton(text)});
 
-        public static implicit operator CustomReplyReplyKeyboardMarkup(string[] texts) =>
+        public static implicit operator CustomReplyKeyboardMarkup(string[] texts) =>
             texts == null
                 ? default
                 : new[] {texts};
 
-        public static implicit operator CustomReplyReplyKeyboardMarkup(string[][] textsItems) =>
+        public static implicit operator CustomReplyKeyboardMarkup(string[][] textsItems) =>
             textsItems == null
                 ? default
-                : new CustomReplyReplyKeyboardMarkup(
+                : new CustomReplyKeyboardMarkup(
                     textsItems.Select(texts =>
                         texts.Select(t => new CustomKeyboardButton(t))
                     ));
@@ -65,7 +65,7 @@ namespace sex_app.Models
 
     public class CustomKeyboardButton : KeyboardButton
     {
-        public CustomKeyboardButton(string text, CustomReplyReplyKeyboardMarkup next) : base(text)
+        public CustomKeyboardButton(string text, CustomReplyKeyboardMarkup next) : base(text)
         {
             Next = next;
         }
@@ -79,10 +79,10 @@ namespace sex_app.Models
         {
         }
 
-        public CustomReplyReplyKeyboardMarkup Next { get; set; }
-        public CustomReplyReplyKeyboardMarkup Prev { get; set; }
+        public CustomReplyKeyboardMarkup Next { get; set; }
+        public CustomReplyKeyboardMarkup Prev { get; set; }
         public bool ToBack { get; set; }
 
-        public CustomReplyReplyKeyboardMarkup Click() => ToBack ? Prev : Next;
+        public CustomReplyKeyboardMarkup Click() => ToBack ? Prev : Next;
     }
 }

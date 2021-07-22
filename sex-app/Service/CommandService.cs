@@ -10,6 +10,7 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using File = System.IO.File;
+using Location = sex_app.Enums.Location;
 
 namespace sex_app.Service
 {
@@ -47,12 +48,15 @@ namespace sex_app.Service
     public static class CommandService
     {
         private static readonly ListCommands<MessageEventArgs, string[], Task> BotCommands = new();
+        private static readonly ListCommands<CallbackQueryEventArgs, string[], Task> BotCallbacks = new();
         private static readonly UserService UserService = new();
         private static MyTelegramBotClient _botClient;
 
         public static void InitCommands(MyTelegramBotClient botClient)
         {
             _botClient = botClient;
+
+            #region Commands
 
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
@@ -109,43 +113,63 @@ namespace sex_app.Service
                         $"About: \n{couple.First().UserName} & {couple.Last().UserName} ❤");
             }, "/coupleInfo"));
 
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
-            {
-                await SendImagePosition(e.Message.Chat.Id, Category.Cunnilingus);
-            }, "/cunnilingus"));
-            
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
-            {
-                await SendImagePosition(e.Message.Chat.Id, Category.Blowjob);
-            }, "/blowjob"));
-            
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
-            {
-                await SendImagePosition(e.Message.Chat.Id, Category.Position69);
-            }, "/69"));
-            
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
-            {
-                await SendImagePosition(e.Message.Chat.Id, Category.OralSex);
-            }, "/oralSex"));
-            
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
-            {
-                await SendImagePosition(e.Message.Chat.Id, Category.Sex);
-            }, "/sex"));
-            
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, _) =>
-            {
-                await SendImagePosition(e.Message.Chat.Id);
-            }, "/fullRandom"));
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Cunnilingus); }, "/cunnilingus"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Blowjob); }, "/blowjob"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Position69); }, "/69"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.OralSex); }, "/oralSex"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Sex); }, "/sex"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) => { await SendImagePosition(e.Message.Chat.Id); }, "/fullRandom"));
 
             static async Task SendImagePosition(long chatId, Category? category = null)
             {
                 var (message, mediaPath) = SexService.GetRandomPositionNew(category);
+                await SendImage(chatId, message, mediaPath);
+            }
+
+            static async Task SendImage(long chatId, string message, string mediaPath)
+            {
                 await using var stream = File.Open(mediaPath, FileMode.Open);
                 await _botClient.SendPhotoAsync(chatId,
                     new InputMedia(stream, "test.png"), message, ParseMode.Markdown);
             }
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите уровень",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(Level)));
+                }, "/level"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите положение",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(Location)));
+                }, "/location"));
+
+            #endregion
+
+            #region Callbacks
+
+            BotCallbacks.Add(new BotCommand<CallbackQueryEventArgs, string[], Task>(
+                async (e, paramList) =>
+                {
+                    var (message, mediaPath) = SexService.GetByFilter(Type.GetType(paramList[0]), paramList[1]);
+                    await SendImage(e.CallbackQuery.From.Id, message, mediaPath);
+                }, "sex_app.Enums."));
+
+            #endregion
         }
 
         public static async Task Execute(MessageEventArgs e, string[] paramList)
@@ -162,6 +186,24 @@ namespace sex_app.Service
                 var (path, menu) = await UserService.GetMenuForUser(e.Message.Chat.Id, paramList[0]);
                 await _botClient.SendTextMessageAsync(e.Message.Chat.Id, path,
                     replyMarkup: menu);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+
+        public static async Task ExecuteCallback(CallbackQueryEventArgs e, string[] paramList)
+        {
+            try
+            {
+                var commandModel = BotCallbacks[paramList[0]];
+                if (commandModel != null)
+                    await commandModel.Execute(e, paramList);
+
+                var prevMessage = e.CallbackQuery.Message;
+                await _botClient.DeleteMessageAsync(prevMessage.Chat.Id, prevMessage.MessageId);
+                await _botClient.SendTextMessageAsync(prevMessage.Chat.Id, prevMessage.Text, replyMarkup: prevMessage.ReplyMarkup);
             }
             catch (Exception exception)
             {

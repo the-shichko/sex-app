@@ -929,6 +929,28 @@ namespace sex_app.Models
                     FileName = "115.png",
                     AdditionalCaresses = new List<AdditionalCaress>()
                 },
+                new PositionItem
+                {
+                    Title = "Лотос",
+                    Activity = Activity.Both,
+                    Level = Level.Easy,
+                    Categories = new List<Category>
+                    {
+                        Category.Sex
+                    },
+                    Locations = new List<Location>
+                    {
+                        Location.FaceToFace, Location.FeetOnShoulders, Location.Sitting
+                    },
+                    Stimulations = new List<Stimulation>()
+                    {
+                        Stimulation.DotP
+                    },
+                    EyeContact = BaseBool.MayBe,
+                    LevelPenetration = LevelPenetration.High,
+                    FileName = "240.png",
+                    AdditionalCaresses = new List<AdditionalCaress>()
+                }
             });
         }
 
@@ -955,14 +977,22 @@ namespace sex_app.Models
         public string ToTelegramMessage()
         {
             return $"*{Title}*\n\n" +
-                   $"Категория: {string.Join(", ", Categories.Select(x => x.GetDisplayName("_").ToLower()))}\n" +
-                   $"Положение: {string.Join(", ", Locations.Select(x => x.GetDisplayName("_").ToLower()))}\n" +
-                   $"Стимулирование: {string.Join(", ", Stimulations.Select(x => x.GetDisplayName("_").ToLower()))}\n" +
+                   (Categories.Count > 0
+                       ? $"Категория: {string.Join(", ", Categories.Select(x => x.GetDisplayName("_").ToLower()))}\n"
+                       : null) +
+                   (Locations.Count > 0
+                       ? $"Положение: {string.Join(", ", Locations.Select(x => x.GetDisplayName("_").ToLower()))}\n"
+                       : null) +
+                   (Stimulations.Count > 0
+                       ? $"Стимулирование: {string.Join(", ", Stimulations.Select(x => x.GetDisplayName("_").ToLower()))}\n"
+                       : null) +
                    $"Проникновение: {LevelPenetration.GetDisplayName("_").ToLower()}\n" +
                    $"Зрительный контакт: {EyeContact.GetDisplayName("_").ToLower()}\n" +
                    $"Активность: {Activity.GetDisplayName("_").ToLower()}\n" +
                    $"Уровень: {Level.GetDisplayName("_").ToLower()}\n" +
-                   $"Доп.: {string.Join(", ", AdditionalCaresses.Select(x => x.GetDisplayName("_").ToLower()))}\n";
+                   (AdditionalCaresses.Count > 0
+                       ? $"Доп.: {string.Join(", ", AdditionalCaresses.Select(x => x.GetDisplayName("_").ToLower()))}\n"
+                       : null);
         }
     }
 }

@@ -101,7 +101,7 @@ namespace sex_app.Service
         }
 
 
-        public async Task<(string, CustomReplyReplyKeyboardMarkup)> GetMenuForUser(long chatId, string clickedText)
+        public async Task<(string, CustomReplyKeyboardMarkup)> GetMenuForUser(long chatId, string clickedText)
         {
             var replyReplyKeyboardMarkup = FindUserMenuRecursion(chatId, clickedText);
             ApplicationUsers[chatId].CurrentMenuTitle =
@@ -112,7 +112,7 @@ namespace sex_app.Service
             return (MenuService.GetPath(menu), menu);
         }
 
-        private CustomReplyReplyKeyboardMarkup FindUserMenuRecursion(long chatId, string clickedText)
+        private CustomReplyKeyboardMarkup FindUserMenuRecursion(long chatId, string clickedText)
         {
             var userKeyboardMarkup = MenuService.GetByTitle(ApplicationUsers[chatId].CurrentMenuTitle, MenuService.GetStartMenu());
 

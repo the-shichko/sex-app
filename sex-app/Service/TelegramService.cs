@@ -12,7 +12,8 @@ namespace sex_app.Service
             var botClient = new MyTelegramBotClient(token ?? Token);
             botClient.StartReceiving();
             botClient.OnMessage += OnTelegramMessage;
-            
+            botClient.OnCallbackQuery += OnCallbackQuery;
+
             MenuService.Init();
             SexService.Init();
             CommandService.InitCommands(botClient);
@@ -23,6 +24,18 @@ namespace sex_app.Service
             await CommandService.Execute(e, e.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Console.WriteLine($"{e.Message.Text} - @{e.Message.Chat.Username ?? e.Message.Chat.FirstName}\n" +
                               $"\t chatId: {e.Message.Chat.Id}\n" +
+                              $"\t date: {DateTime.Now:dd.MM.yyyy hh:mm}");
+        }
+
+        private static async void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
+        {
+            await CommandService.ExecuteCallback(e,
+                e.CallbackQuery.Data.Trim().Split("&", StringSplitOptions.RemoveEmptyEntries));
+
+            var data = e.CallbackQuery.Data;
+            var user = e.CallbackQuery.From;
+            Console.WriteLine($"{data} (Callback) - @{user.Username ?? user.FirstName}\n" +
+                              $"\t chatId: {user.Id}\n" +
                               $"\t date: {DateTime.Now:dd.MM.yyyy hh:mm}");
         }
     }

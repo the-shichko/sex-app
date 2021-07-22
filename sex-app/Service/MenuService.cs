@@ -1,30 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using sex_app.Extensions;
 using sex_app.Models;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace sex_app.Service
 {
     public static class MenuService
     {
-        private static CustomReplyReplyKeyboardMarkup MainMenu { get; set; }
+        private static CustomReplyKeyboardMarkup MainMenu { get; set; }
 
         public static void Init()
         {
-            MainMenu = new CustomReplyReplyKeyboardMarkup
+            MainMenu = new CustomReplyKeyboardMarkup
             {
                 Title = "Main",
                 Keyboard = new IEnumerable<CustomKeyboardButton>[]
                 {
                     new CustomKeyboardButton[]
                     {
-                        new("💑", new CustomReplyReplyKeyboardMarkup
+                        new("💑", new CustomReplyKeyboardMarkup
                         {
                             Title = "💑",
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
                             {
                                 new CustomKeyboardButton[]
                                 {
-                                    new("categories", new CustomReplyReplyKeyboardMarkup
+                                    new("categories", new CustomReplyKeyboardMarkup
                                     {
                                         Title = "Categories",
                                         Keyboard = new IEnumerable<CustomKeyboardButton>[]
@@ -33,7 +36,7 @@ namespace sex_app.Service
                                             {
                                                 new("/cunnilingus"),
                                                 new("/69"),
-                                                new ("/blowjob")
+                                                new("/blowjob")
                                             },
                                             new CustomKeyboardButton[]
                                             {
@@ -51,7 +54,7 @@ namespace sex_app.Service
                                 }
                             }
                         }),
-                        new("info", new CustomReplyReplyKeyboardMarkup
+                        new("info", new CustomReplyKeyboardMarkup
                         {
                             Title = "Info",
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
@@ -72,8 +75,8 @@ namespace sex_app.Service
             SetPrev(MainMenu);
         }
 
-        private static void SetPrev(CustomReplyReplyKeyboardMarkup baseMenu,
-            CustomReplyReplyKeyboardMarkup parent = null)
+        private static void SetPrev(CustomReplyKeyboardMarkup baseMenu,
+            CustomReplyKeyboardMarkup parent = null)
         {
             if (baseMenu == null) return;
             foreach (var keyboards in baseMenu.Keyboard)
@@ -88,7 +91,7 @@ namespace sex_app.Service
             }
         }
 
-        public static CustomReplyReplyKeyboardMarkup GetByTitle(string title, CustomReplyReplyKeyboardMarkup baseMenu)
+        public static CustomReplyKeyboardMarkup GetByTitle(string title, CustomReplyKeyboardMarkup baseMenu)
         {
             if (baseMenu == null)
                 return null;
@@ -101,12 +104,12 @@ namespace sex_app.Service
                 .FirstOrDefault();
         }
 
-        public static CustomReplyReplyKeyboardMarkup GetStartMenu()
+        public static CustomReplyKeyboardMarkup GetStartMenu()
         {
             return MainMenu;
         }
 
-        public static string GetPath(CustomReplyReplyKeyboardMarkup currentMenu)
+        public static string GetPath(CustomReplyKeyboardMarkup currentMenu)
         {
             if (currentMenu == null)
                 return null;
@@ -120,6 +123,28 @@ namespace sex_app.Service
             }
 
             return "Main";
+        }
+
+        public static IReplyMarkup GetReplyEnum(Type type)
+        {
+            if (!type.IsEnum) return null;
+
+            var items = (from object item in Enum.GetValues(type) select item).ToList();
+
+            var inlineButtons = new List<List<InlineKeyboardButton>>();
+            const int columns = 3;
+            for (var i = 0; i < items.Count; i += columns)
+            {
+                inlineButtons.Add(
+                    items.Skip(i).Take(columns).Select(x =>
+                        new InlineKeyboardButton
+                        {
+                            Text = x.GetDisplayName(),
+                            CallbackData = $"{type}&{x}"
+                        }).ToList());
+            }
+
+            return new InlineKeyboardMarkup(inlineButtons);
         }
     }
 }
