@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 using sex_app.Dictionaries;
 using sex_app.Enums;
 using sex_app.Extensions;
@@ -14,13 +15,15 @@ namespace sex_app.Service
     public static class SexService
     {
         private static readonly string ResourcesPath = $"{Directory.GetCurrentDirectory()}\\Resources";
+        private static readonly string PositionsPath = $"{Directory.GetCurrentDirectory()}\\Data\\positions.json";
         private static ListPositions _listPositions;
         private static List<int> RandomNumber { get; set; }
 
         public static void Init()
         {
-            _listPositions = new ListPositions();
             RandomNumber = new List<int>();
+            _listPositions =
+                new ListPositions(JsonConvert.DeserializeObject<List<PositionItem>>(File.ReadAllText(PositionsPath)));
         }
 
         /// <summary>
@@ -40,11 +43,13 @@ namespace sex_app.Service
 
         private static int CustomRandom(int from, int to)
         {
-            if (RandomNumber.Count > RandomNumberGenerator.GetInt32(15, 20))
-                RandomNumber = new List<int>();
-
+            var iterationCount = 0;
             while (true)
             {
+                iterationCount++;
+                if (iterationCount == 1000)
+                    RandomNumber = new List<int>();
+                
                 var value = RandomNumberGenerator.GetInt32(from, to);
                 if (RandomNumber.Contains(value)) continue;
 
