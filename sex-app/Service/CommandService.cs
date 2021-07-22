@@ -157,6 +157,13 @@ namespace sex_app.Service
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите положение",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Location)));
                 }, "/location"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите категорию",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(Category)));
+                }, "/category"));
 
             #endregion
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using sex_app.Dictionaries;
 using sex_app.Enums;
 using sex_app.Extensions;
 using sex_app.Models;
@@ -55,38 +56,37 @@ namespace sex_app.Service
 
         public static (string, string) GetByFilter(Type type, string value)
         {
-            var test = _listPositions.Select(x => x.GetType().GetProperties()
-                .FirstOrDefault(propertyInfo => propertyInfo.PropertyType == typeof(List<>).MakeGenericType(type))).ToList()
-                .Select(x => x.GetValue(x, null));
+            List<PositionItem> filterList;
+            if (FilterResources.ListOfTypeGeneric.Contains(type.Name))
+            {
+                var listProperties = _listPositions.Select(x => new
+                    {
+                        Item = x,
+                        Property = x.GetType().GetProperties()
+                            .FirstOrDefault(propertyInfo =>
+                                propertyInfo.PropertyType == typeof(List<>).MakeGenericType(type))
+                    })
+                    .ToList();
 
-            // var test2 = test.Where(x => ((List<object>) x).Select(o => ((dynamic) o).GetDisplayName()).Contains(value));
-
-
-            // foreach (IList obj in test.Select(x => x.GetValue(x, null)))
-            // {
-            //     var a = Contains(obj);
-            // }
-            //
-            // static bool Contains(IList list)
-            // {
-            //     foreach (var obj in list)
-            //     {
-            //         if (obj.ToString() == value)
-            //             return true;
-            //     }
-            //
-            //     return false;
-            // }
-
-
-            var filterList = type.IsEnum
-                ? _listPositions.Where(x => x.GetType().GetProperties()
+                filterList = (from item in listProperties
+                    let listOfItems = item.Property.GetValue(item.Item)
+                    let list = (listOfItems as IEnumerable)?.OfType<object>().ToList()
+                    where list != null && list.Select(x => x.ToString()).Contains(value)
+                    select item.Item).ToList();
+            }
+            else if (type.IsEnum)
+            {
+                filterList = _listPositions.Where(x => x.GetType().GetProperties()
                         .FirstOrDefault(propertyInfo => propertyInfo.GetType() == type)?.GetValue(x, null)
                         .GetDisplayName()?.ToString() == value)
-                    .ToList()
-                : _listPositions.Where(x =>
+                    .ToList();
+            }
+            else
+            {
+                filterList = _listPositions.Where(x =>
                     x.GetType().GetProperties().FirstOrDefault(propertyInfo => propertyInfo.GetType() == type)
                         ?.GetValue(x, null)?.ToString() == value).ToList();
+            }
 
             var index = CustomRandom(0, filterList.Count - 1);
             return (filterList[index].ToTelegramMessage(),
