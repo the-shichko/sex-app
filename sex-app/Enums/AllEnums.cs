@@ -82,7 +82,6 @@ namespace sex_app.Enums
 
     public enum BaseBool
     {
-        [Display(Name = "Да")]
         Yea,
         [Display(Name = "Нет")]
         No,

@@ -8,7 +8,9 @@ namespace sex_app.Dictionaries
         public static readonly List<string> ListOfTypeGeneric = new()
         {
             "Location",
-            "Category"
+            "Category",
+            "Stimulation",
+            "AdditionalCaress"
         };
     }
 }

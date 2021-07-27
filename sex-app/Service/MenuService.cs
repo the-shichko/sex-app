@@ -27,21 +27,26 @@ namespace sex_app.Service
                             {
                                 new CustomKeyboardButton[]
                                 {
-                                    new("categories", new CustomReplyKeyboardMarkup
+                                    new("filter", new CustomReplyKeyboardMarkup
                                     {
-                                        Title = "Categories",
+                                        Title = "Filter",
                                         Keyboard = new IEnumerable<CustomKeyboardButton>[]
                                         {
                                             new CustomKeyboardButton[]
                                             {
-                                                new("/cunnilingus"),
-                                                new("/69"),
-                                                new("/blowjob")
+                                                new("/location"),
+                                                new("/category"),
+                                                new("/stimulation")
                                             },
                                             new CustomKeyboardButton[]
                                             {
-                                                new("/oralSex"),
-                                                new("/sex"),
+                                                new("/penetration"),
+                                                new("/eye"),
+                                                new("/activity"),
+                                            },
+                                            new CustomKeyboardButton[]
+                                            {
+                                                new("/caress"),
                                                 new("назад", true)
                                             }
                                         }

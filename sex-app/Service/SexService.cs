@@ -30,15 +30,11 @@ namespace sex_app.Service
         /// Get path of random (message, path to file) by type
         /// </summary>
         /// <returns></returns>
-        public static (string, string) GetRandomPositionNew(Category? position = null)
+        public static (string, string) GetRandomPositionNew()
         {
-            var items = position != null
-                ? _listPositions.FilterByCategory(position.Value)
-                : _listPositions;
-
-            var index = CustomRandom(0, items.Count - 1);
-            return (items[index].ToTelegramMessage(),
-                $"{ResourcesPath}\\{items[index].FileName}");
+            var index = CustomRandom(0, _listPositions.Count - 1);
+            return (_listPositions[index].ToTelegramMessage(),
+                $"{ResourcesPath}\\{_listPositions[index].FileName}");
         }
 
         private static int CustomRandom(int from, int to)
@@ -49,7 +45,7 @@ namespace sex_app.Service
                 iterationCount++;
                 if (iterationCount == 1000)
                     RandomNumber = new List<int>();
-                
+
                 var value = RandomNumberGenerator.GetInt32(from, to);
                 if (RandomNumber.Contains(value)) continue;
 
@@ -82,14 +78,14 @@ namespace sex_app.Service
             else if (type.IsEnum)
             {
                 filterList = _listPositions.Where(x => x.GetType().GetProperties()
-                        .FirstOrDefault(propertyInfo => propertyInfo.GetType() == type)?.GetValue(x, null)
-                        .GetDisplayName()?.ToString() == value)
+                        .FirstOrDefault(propertyInfo => propertyInfo.PropertyType == type)?.GetValue(x, null)
+                        ?.ToString() == value)
                     .ToList();
             }
             else
             {
                 filterList = _listPositions.Where(x =>
-                    x.GetType().GetProperties().FirstOrDefault(propertyInfo => propertyInfo.GetType() == type)
+                    x.GetType().GetProperties().FirstOrDefault(propertyInfo => propertyInfo.PropertyType == type)
                         ?.GetValue(x, null)?.ToString() == value).ToList();
             }
 

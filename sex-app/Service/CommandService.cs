@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using sex_app.Enums;
 using sex_app.Exceptions;
@@ -114,29 +113,12 @@ namespace sex_app.Service
             }, "/coupleInfo"));
 
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Cunnilingus); }, "/cunnilingus"));
-
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Blowjob); }, "/blowjob"));
-
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Position69); }, "/69"));
-
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.OralSex); }, "/oralSex"));
-
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, _) => { await SendImagePosition(e.Message.Chat.Id, Category.Sex); }, "/sex"));
-
-            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
-                async (e, _) => { await SendImagePosition(e.Message.Chat.Id); }, "/fullRandom"));
-
-            static async Task SendImagePosition(long chatId, Category? category = null)
-            {
-                var (message, mediaPath) = SexService.GetRandomPositionNew(category);
-                await SendImage(chatId, message, mediaPath);
-            }
-
+                async (e, _) =>
+                {
+                    var (message, mediaPath) = SexService.GetRandomPositionNew();
+                    await SendImage(e.Message.Chat.Id, message, mediaPath);
+                }, "/fullRandom"));
+            
             static async Task SendImage(long chatId, string message, string mediaPath)
             {
                 await using var stream = File.Open(mediaPath, FileMode.Open);
@@ -164,6 +146,41 @@ namespace sex_app.Service
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите категорию",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Category)));
                 }, "/category"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите стимуляцию",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(Stimulation)));
+                }, "/stimulation"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите проникновение",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(LevelPenetration)));
+                }, "/penetration"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Зрительный контакт",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(BaseBool)));
+                }, "/eye"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(LevelPenetration)));
+                }, "/caress"));
+            
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите активность",
+                        replyMarkup: MenuService.GetReplyEnum(typeof(Activity)));
+                }, "/activity"));
 
             #endregion
 
