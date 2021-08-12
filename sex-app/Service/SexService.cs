@@ -75,18 +75,12 @@ namespace sex_app.Service
                     where list != null && list.Select(x => x.ToString()).Contains(value)
                     select item.Item).ToList();
             }
-            else if (type.IsEnum)
+            else
             {
                 filterList = _listPositions.Where(x => x.GetType().GetProperties()
                         .FirstOrDefault(propertyInfo => propertyInfo.PropertyType == type)?.GetValue(x, null)
                         ?.ToString() == value)
                     .ToList();
-            }
-            else
-            {
-                filterList = _listPositions.Where(x =>
-                    x.GetType().GetProperties().FirstOrDefault(propertyInfo => propertyInfo.PropertyType == type)
-                        ?.GetValue(x, null)?.ToString() == value).ToList();
             }
 
             var index = CustomRandom(0, filterList.Count - 1);

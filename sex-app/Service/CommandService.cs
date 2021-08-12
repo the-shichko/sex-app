@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using sex_app.Enums;
 using sex_app.Exceptions;
+using sex_app.Extensions;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -118,7 +119,7 @@ namespace sex_app.Service
                     var (message, mediaPath) = SexService.GetRandomPositionNew();
                     await SendImage(e.Message.Chat.Id, message, mediaPath);
                 }, "/fullRandom"));
-            
+
             static async Task SendImage(long chatId, string message, string mediaPath)
             {
                 await using var stream = File.Open(mediaPath, FileMode.Open);
@@ -132,49 +133,49 @@ namespace sex_app.Service
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите уровень",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Level)));
                 }, "/level"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите положение",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Location)));
                 }, "/location"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите категорию",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Category)));
                 }, "/category"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите стимуляцию",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Stimulation)));
                 }, "/stimulation"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите проникновение",
                         replyMarkup: MenuService.GetReplyEnum(typeof(LevelPenetration)));
                 }, "/penetration"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Зрительный контакт",
                         replyMarkup: MenuService.GetReplyEnum(typeof(BaseBool)));
                 }, "/eye"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
                     await _botClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите",
-                        replyMarkup: MenuService.GetReplyEnum(typeof(LevelPenetration)));
+                        replyMarkup: MenuService.GetReplyEnum(typeof(AdditionalCaress)));
                 }, "/caress"));
-            
+
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
                 async (e, _) =>
                 {
@@ -207,9 +208,9 @@ namespace sex_app.Service
                         await commandModel.Execute(e, paramList.Skip(1).ToArray());
                 }
 
-                var (path, menu) = await UserService.GetMenuForUser(e.Message.Chat.Id, paramList[0]);
+                var (path, menuMarkup) = await UserService.GetMenuForUser(e.Message.Chat.Id, paramList.Join(" "));
                 await _botClient.SendTextMessageAsync(e.Message.Chat.Id, path,
-                    replyMarkup: menu);
+                    replyMarkup: menuMarkup);
             }
             catch (Exception exception)
             {
@@ -227,7 +228,7 @@ namespace sex_app.Service
 
                 var prevMessage = e.CallbackQuery.Message;
                 await _botClient.DeleteMessageAsync(prevMessage.Chat.Id, prevMessage.MessageId);
-                await _botClient.SendTextMessageAsync(prevMessage.Chat.Id, prevMessage.Text, replyMarkup: prevMessage.ReplyMarkup);
+                // await _botClient.SendTextMessageAsync(prevMessage.Chat.Id, prevMessage.Text, replyMarkup: prevMessage.ReplyMarkup);
             }
             catch (Exception exception)
             {

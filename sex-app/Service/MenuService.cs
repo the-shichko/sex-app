@@ -11,25 +11,26 @@ namespace sex_app.Service
     {
         private static CustomReplyKeyboardMarkup MainMenu { get; set; }
 
+        private const string HomeEmoji = "🏠";
         public static void Init()
         {
             MainMenu = new CustomReplyKeyboardMarkup
             {
-                Title = "Main",
+                Title = HomeEmoji,
                 Keyboard = new IEnumerable<CustomKeyboardButton>[]
                 {
                     new CustomKeyboardButton[]
                     {
-                        new("💑", new CustomReplyKeyboardMarkup
+                        new("💕", new CustomReplyKeyboardMarkup
                         {
-                            Title = "💑",
+                            Title = "💕",
                             Keyboard = new IEnumerable<CustomKeyboardButton>[]
                             {
                                 new CustomKeyboardButton[]
                                 {
-                                    new("filter", new CustomReplyKeyboardMarkup
+                                    new("Позы 🔥", new CustomReplyKeyboardMarkup
                                     {
-                                        Title = "Filter",
+                                        Title = "Позы 🔥",
                                         Keyboard = new IEnumerable<CustomKeyboardButton>[]
                                         {
                                             new CustomKeyboardButton[]
@@ -123,11 +124,11 @@ namespace sex_app.Service
                 foreach (var button in keyboards)
                 {
                     if (button.ToBack)
-                        return $"{GetPath(button.Prev)} > {currentMenu.Title}";
+                        return $"{GetPath(button.Prev)} - {currentMenu.Title}";
                 }
             }
 
-            return "Main";
+            return MainMenu.Title;
         }
 
         public static IReplyMarkup GetReplyEnum(Type type)
@@ -137,7 +138,7 @@ namespace sex_app.Service
             var items = (from object item in Enum.GetValues(type) select item).ToList();
 
             var inlineButtons = new List<List<InlineKeyboardButton>>();
-            const int columns = 3;
+            const int columns = 2;
             for (var i = 0; i < items.Count; i += columns)
             {
                 inlineButtons.Add(
