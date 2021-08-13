@@ -6,8 +6,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using sex_app.Dictionaries;
-using sex_app.Enums;
-using sex_app.Extensions;
 using sex_app.Models;
 
 namespace sex_app.Service

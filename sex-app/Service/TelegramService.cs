@@ -7,6 +7,9 @@ namespace sex_app.Service
     {
         private const string Token = "1714106940:AAGcEPU6IOVlIb5oOg4YaN6aJDtkbFS9MZg";
 
+        private static BotExecuteService<CallbackQueryEventArgs> CallbackService;
+        private static BotExecuteService<MessageEventArgs> CommandService;
+
         public TelegramService(string token = null)
         {
             var botClient = new MyTelegramBotClient(token ?? Token);
@@ -16,7 +19,9 @@ namespace sex_app.Service
 
             MenuService.Init();
             SexService.Init();
-            CommandService.InitCommands(botClient);
+
+            CommandService = new CommandService(botClient);
+            CallbackService = new CallbackService(botClient);
         }
 
         private static async void OnTelegramMessage(object sender, MessageEventArgs e)
@@ -29,7 +34,7 @@ namespace sex_app.Service
 
         private static async void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
         {
-            await CommandService.ExecuteCallback(e,
+            await CallbackService.Execute(e,
                 e.CallbackQuery.Data.Trim().Split("&", StringSplitOptions.RemoveEmptyEntries));
 
             var data = e.CallbackQuery.Data;

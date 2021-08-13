@@ -15,6 +15,10 @@ namespace sex_app.Service
         {
         }
 
+        public MyTelegramBotClient() : base("")
+        {
+        }
+
         public async Task<IEnumerable<Message>> SendTextMessageAsync(IEnumerable<long> chatIds, string text,
             ParseMode parseMode = default,
             bool disableWebPagePreview = default,
@@ -31,6 +35,13 @@ namespace sex_app.Service
             }
 
             return result;
+        }
+        
+        public async Task<Message> SendPhotoAsync(long chatId, string message, string mediaPath)
+        {
+            await using var stream = System.IO.File.Open(mediaPath, System.IO.FileMode.Open);
+            return await SendPhotoAsync(chatId,
+                new InputMedia(stream, "test.png"), message, ParseMode.Markdown);
         }
     }
 }

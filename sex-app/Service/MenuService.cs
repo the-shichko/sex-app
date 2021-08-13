@@ -12,6 +12,8 @@ namespace sex_app.Service
         private static CustomReplyKeyboardMarkup MainMenu { get; set; }
 
         private const string HomeEmoji = "🏠";
+        private const string BackText = "⬅️";
+
         public static void Init()
         {
             MainMenu = new CustomReplyKeyboardMarkup
@@ -35,29 +37,24 @@ namespace sex_app.Service
                                         {
                                             new CustomKeyboardButton[]
                                             {
-                                                new("/location"),
                                                 new("/category"),
-                                                new("/stimulation")
-                                            },
-                                            new CustomKeyboardButton[]
-                                            {
-                                                new("/penetration"),
+                                                new("/location"),
                                                 new("/eye"),
                                                 new("/activity"),
                                             },
                                             new CustomKeyboardButton[]
                                             {
+                                                new("/stimulation"),
+                                                new("/penetration"),
                                                 new("/caress"),
-                                                new("назад", true)
+                                                new(BackText, true)
                                             }
                                         }
                                     }),
-                                    new("/fullRandom"),
+                                    new("Купоны 🎫"),
+                                    new("/random")
                                 },
-                                new CustomKeyboardButton[]
-                                {
-                                    new("назад", true)
-                                }
+                                new CustomKeyboardButton[] { new(BackText, true) }
                             }
                         }),
                         new("info", new CustomReplyKeyboardMarkup
@@ -68,7 +65,7 @@ namespace sex_app.Service
                                 new CustomKeyboardButton[]
                                 {
                                     new("/coupleInfo"),
-                                    new("назад", true),
+                                    new(BackText, true),
                                 }
                             },
                             ResizeKeyboard = true
