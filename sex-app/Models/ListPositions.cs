@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using sex_app.Enums;
 using sex_app.Extensions;
@@ -18,6 +19,7 @@ namespace sex_app.Models
         }
     }
 
+    [Serializable]
     public class PositionItem
     {
         public string Title { get; init; }

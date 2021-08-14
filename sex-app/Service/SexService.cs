@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using sex_app.Dictionaries;
+using sex_app.Enums;
 using sex_app.Models;
 
 namespace sex_app.Service
@@ -84,6 +85,30 @@ namespace sex_app.Service
             var index = CustomRandom(0, filterList.Count - 1);
             return (filterList[index].ToTelegramMessage(),
                 $"{ResourcesPath}\\{filterList[index].FileName}");
+        }
+
+        /// <summary>
+        /// Get set of images for sex
+        /// </summary>
+        /// <param name="dictionaryFilter">Key = value of enum Category, Value = count</param>
+        /// <returns>images of positions by dictionary filter</returns>
+        public static IEnumerable<string> GetSexSet(Dictionary<Category, int> dictionaryFilter)
+        {
+            var listPaths = new List<string>();
+            foreach (var (value, count) in dictionaryFilter)
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    var image = GetByFilter(typeof(Category), value.ToString()).Item2;
+
+                    if (!listPaths.Contains(image))
+                        listPaths.Add(image);
+                    else
+                        i--;
+                }
+            }
+
+            return listPaths;
         }
     }
 }

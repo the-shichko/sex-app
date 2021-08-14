@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using sex_app.Enums;
@@ -69,9 +70,10 @@ namespace sex_app.Service
                 var chatId = e.Message.Chat.Id;
                 var couple = UserService.GetCouple(chatId);
 
-                if (couple != null)
-                    await BotClient.SendTextMessageAsync(chatId,
-                        $"About: \n{couple.First().UserName} & {couple.Last().UserName} ❤");
+                await BotClient.SendTextMessageAsync(chatId,
+                    couple != null
+                        ? $"About: \n{couple.First().UserName} & {couple.Last().UserName} ❤"
+                        : "Инфрмации нет");
             }, "/coupleInfo"));
 
             BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
@@ -136,6 +138,18 @@ namespace sex_app.Service
                     await BotClient.SendTextMessageAsync(e.Message.Chat.Id, "Выберите активность",
                         replyMarkup: MenuService.GetReplyEnum(typeof(Activity)));
                 }, "/activity"));
+
+            BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(
+                async (e, _) =>
+                {
+                    await BotClient.SendPhotoAlbumAsync(e.Message.Chat.Id, "", SexService.GetSexSet(
+                        new Dictionary<Category, int>()
+                        {
+                            { Category.Cunnilingus, 2 },
+                            { Category.Blowjob, 2 },
+                            { Category.Sex, 3 }
+                        }));
+                }, "/sex"));
         }
 
         public override Func<MessageEventArgs, MyTelegramBotClient, string[], Task> ExecuteAction { get; set; } =

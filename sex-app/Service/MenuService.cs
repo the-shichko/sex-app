@@ -52,9 +52,16 @@ namespace sex_app.Service
                                         }
                                     }),
                                     new("Купоны 🎫"),
-                                    new("/random")
                                 },
-                                new CustomKeyboardButton[] { new(BackText, true) }
+                                new CustomKeyboardButton[]
+                                {
+                                    new("/random"),
+                                    new("/sex")
+                                },
+                                new CustomKeyboardButton[]
+                                {
+                                    new(BackText, true)
+                                }
                             }
                         }),
                         new("info", new CustomReplyKeyboardMarkup
@@ -101,10 +108,12 @@ namespace sex_app.Service
             if (baseMenu.Title == title)
                 return baseMenu;
 
-            return (from keyboards in baseMenu.Keyboard
-                    from button in keyboards
-                    select GetByTitle(title, button.Next))
-                .FirstOrDefault();
+            // foreach (var keyboads in baseMenu.Keyboard)
+            // {
+            // }
+
+            return (from keyboards in baseMenu.Keyboard from button in keyboards select GetByTitle(title, button.Next))
+                .FirstOrDefault(markup => markup != null);
         }
 
         public static CustomReplyKeyboardMarkup GetStartMenu()
