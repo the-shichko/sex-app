@@ -5,7 +5,7 @@ namespace sex_app.Service
 {
     public class TelegramService
     {
-        private const string Token = "1714106940:AAGcEPU6IOVlIb5oOg4YaN6aJDtkbFS9MZg";
+        private const string Token = "1988557630:AAFG1fzjHl6fglSkf5a4hwveLBFjy3Uannw";
 
         private static BotExecuteService<CallbackQueryEventArgs> CallbackService;
         private static BotExecuteService<MessageEventArgs> CommandService;
