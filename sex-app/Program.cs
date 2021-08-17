@@ -9,8 +9,6 @@ namespace sex_app
         static async Task Main(string[] args)
         {
             _ = new TelegramService();
-
-            Console.WriteLine("Working...");
             await Task.Delay(-1);
         }
     }

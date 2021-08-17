@@ -1,8 +1,7 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using sex_app.Models;
+using Telegram.Bot;
 
 namespace sex_app.Service
 {
@@ -10,25 +9,25 @@ namespace sex_app.Service
     /// Interface for Execute telegram actions
     /// </summary>
     /// <typeparam name="T">EventArgs from Telegram</typeparam>
-    public interface IBotExecuteService<T> where T : EventArgs
+    public interface IBotExecuteService<T>
     {
-        public MyTelegramBotClient BotClient { get; }
+        public ITelegramBotClient BotClient { get; }
         public static ListCommands<T, string[], Task> ListCommands { get; } = new();
-        public Func<T, MyTelegramBotClient, string[], Task> ExecuteAction { get; set; }
+        public Func<T, ITelegramBotClient, string[], Task> ExecuteAction { get; set; }
 
         public Task Execute(T e, string[] paramList);
     }
 
-    public abstract class BotExecuteService<T> : IBotExecuteService<T> where T : EventArgs
+    public abstract class BotExecuteService<T> : IBotExecuteService<T>
     {
-        protected BotExecuteService(MyTelegramBotClient botClient)
+        protected BotExecuteService(ITelegramBotClient botClient)
         {
             BotClient = botClient;
         }
 
         protected static ListCommands<T, string[], Task> ListCommands { get; } = new();
-        public MyTelegramBotClient BotClient { get; }
-        public abstract Func<T, MyTelegramBotClient, string[], Task> ExecuteAction { get; set; }
+        public ITelegramBotClient BotClient { get; }
+        public abstract Func<T, ITelegramBotClient, string[], Task> ExecuteAction { get; set; }
 
         public async Task Execute(T e, string[] paramList)
         {
