@@ -75,7 +75,7 @@ namespace sex_app.Models
             ToBack = toBack;
         }
 
-        public CustomKeyboardButton()
+        public CustomKeyboardButton() : base("")
         {
         }
 

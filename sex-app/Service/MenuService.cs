@@ -16,72 +16,6 @@ namespace sex_app.Service
 
         public static void Init()
         {
-            MainMenu = new CustomReplyKeyboardMarkup
-            {
-                Title = HomeEmoji,
-                Keyboard = new IEnumerable<CustomKeyboardButton>[]
-                {
-                    new CustomKeyboardButton[]
-                    {
-                        new("💕", new CustomReplyKeyboardMarkup
-                        {
-                            Title = "💕",
-                            Keyboard = new IEnumerable<CustomKeyboardButton>[]
-                            {
-                                new CustomKeyboardButton[]
-                                {
-                                    new("Позы 🔥", new CustomReplyKeyboardMarkup
-                                    {
-                                        Title = "Позы 🔥",
-                                        Keyboard = new IEnumerable<CustomKeyboardButton>[]
-                                        {
-                                            new CustomKeyboardButton[]
-                                            {
-                                                new("/category"),
-                                                new("/location"),
-                                                new("/eye"),
-                                                new("/activity"),
-                                            },
-                                            new CustomKeyboardButton[]
-                                            {
-                                                new("/stimulation"),
-                                                new("/penetration"),
-                                                new("/caress"),
-                                                new(BackText, true)
-                                            }
-                                        }
-                                    }),
-                                    new("Купоны 🎫"),
-                                },
-                                new CustomKeyboardButton[]
-                                {
-                                    new("/random"),
-                                    new("/sex")
-                                },
-                                new CustomKeyboardButton[]
-                                {
-                                    new(BackText, true)
-                                }
-                            }
-                        }),
-                        new("info", new CustomReplyKeyboardMarkup
-                        {
-                            Title = "Info",
-                            Keyboard = new IEnumerable<CustomKeyboardButton>[]
-                            {
-                                new CustomKeyboardButton[]
-                                {
-                                    new("/coupleInfo"),
-                                    new(BackText, true),
-                                }
-                            },
-                            ResizeKeyboard = true
-                        }),
-                    }
-                },
-                ResizeKeyboard = true
-            };
-
             SetPrev(MainMenu);
         }
 
@@ -137,26 +71,6 @@ namespace sex_app.Service
             return MainMenu.Title;
         }
 
-        public static IReplyMarkup GetReplyEnum(Type type)
-        {
-            if (!type.IsEnum) return null;
-
-            var items = (from object item in Enum.GetValues(type) select item).ToList();
-
-            var inlineButtons = new List<List<InlineKeyboardButton>>();
-            const int columns = 2;
-            for (var i = 0; i < items.Count; i += columns)
-            {
-                inlineButtons.Add(
-                    items.Skip(i).Take(columns).Select(x =>
-                        new InlineKeyboardButton
-                        {
-                            Text = x.GetDisplayName(),
-                            CallbackData = $"{type}&{x}"
-                        }).ToList());
-            }
-
-            return new InlineKeyboardMarkup(inlineButtons);
-        }
+        
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Telegram.Bot.Args;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace sex_app.Models
 {
@@ -16,9 +19,9 @@ namespace sex_app.Models
             Text = commandText;
         }
 
-        public TResult Execute(TI messageEvent, TP paramList)
+        public TResult Execute(TI updateHandleObject, TP paramList)
         {
-            return _command(messageEvent, paramList);
+            return _command(updateHandleObject, paramList);
         }
     }
 
