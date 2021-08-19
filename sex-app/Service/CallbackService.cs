@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using sex_app.Dictionaries;
 using sex_app.Enums;
 using sex_app.Extensions;
 using sex_app.Models;
@@ -11,7 +12,7 @@ namespace sex_app.Service
 {
     public class CallbackService : BotExecuteService<CallbackQuery>
     {
-        public CallbackService(ITelegramBotClient botClient) : base(botClient)
+        public CallbackService(ITelegramBotClient botClient, UserService userService) : base(botClient, userService)
         {
             ListCommands.Add(new BotCommand<CallbackQuery, string[], Task>(
                 async (callbackQuery, paramList) =>
@@ -24,14 +25,24 @@ namespace sex_app.Service
                 async (callbackQuery, _) =>
                 {
                     if (callbackQuery.Message != null)
-                        await BotClient.CustomSendPhotoAlbumAsync(callbackQuery.Message.Chat.Id, "", SexService.GetSexSet(
-                            new Dictionary<Category, int>()
-                            {
-                                { Category.Cunnilingus, 2 },
-                                { Category.Blowjob, 2 },
-                                { Category.Sex, 3 }
-                            }));
+                        await BotClient.CustomSendPhotoAlbumAsync(callbackQuery.Message.Chat.Id, "",
+                            SexService.GetSexSet(
+                                new Dictionary<Category, int>()
+                                {
+                                    { Category.Cunnilingus, 2 },
+                                    { Category.Blowjob, 2 },
+                                    { Category.Sex, 3 }
+                                }));
                 }, "Menu-Sex"));
+
+            ListCommands.Add(new BotCommand<CallbackQuery, string[], Task>(
+                async (callbackQuery, paramList) =>
+                {
+                    var newStatus = (StatusUser)Enum.Parse(typeof(StatusUser), paramList[1]);
+                    await userService.SetStatusUser(callbackQuery.From.Id, newStatus);
+                    await botClient.SendTextMessageAsync(callbackQuery.From.Id,
+                        TgMessageStatusResources.Values[newStatus]);
+                }, "ToDo"));
         }
 
         public override Func<CallbackQuery, ITelegramBotClient, string[], Task> ExecuteAction { get; set; } =

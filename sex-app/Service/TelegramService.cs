@@ -13,8 +13,9 @@ namespace sex_app.Service
     {
         private const string Token = "1988557630:AAFG1fzjHl6fglSkf5a4hwveLBFjy3Uannw";
 
-        private static BotExecuteService<CallbackQuery> CallbackService;
-        private static BotExecuteService<Message> CommandService;
+        private static BotExecuteService<CallbackQuery> TgCallbackService;
+        private static BotExecuteService<Message> TgCommandService;
+        private static BotExecuteService<Message> TgTextService;
 
         private static readonly ReceiverOptions _receiverOptions = new()
         {
@@ -27,12 +28,16 @@ namespace sex_app.Service
         {
             switch (update.Type)
             {
-                case UpdateType.Message:
-                    await CommandService.Execute(update.Message,
+                case UpdateType.Message when update.Message is { Text: { } } && update.Message!.Text.StartsWith("/"):
+                    await TgCommandService.Execute(update.Message!.Chat.Id, update.Message,
                         update.Message?.Text?.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries));
                     break;
+                case UpdateType.Message when update.Message is { Text: { } } && !update.Message!.Text.StartsWith("/"):
+                    await TgTextService.Execute(update.Message!.Chat.Id, update.Message,
+                        update.Message?.Text?.Trim().Split("\n", StringSplitOptions.RemoveEmptyEntries));
+                    break;
                 case UpdateType.CallbackQuery:
-                    await CallbackService.Execute(update.CallbackQuery,
+                    await TgCallbackService.Execute(update.CallbackQuery!.From.Id, update.CallbackQuery,
                         update.CallbackQuery?.Data?.Trim().Split("&", StringSplitOptions.RemoveEmptyEntries));
                     break;
                 case UpdateType.InlineQuery:
@@ -63,8 +68,11 @@ namespace sex_app.Service
             ReplyMarkupService.Init();
             SexService.Init();
 
-            CommandService = new CommandService(botClient);
-            CallbackService = new CallbackService(botClient);
+            var userService = new UserService();
+            var todoService = new ToDoService(userService);
+            TgCommandService = new CommandService(botClient, userService);
+            TgCallbackService = new CallbackService(botClient, userService);
+            TgTextService = new TextService(botClient, userService, todoService);
             Console.WriteLine($"Services started");
         }
     }

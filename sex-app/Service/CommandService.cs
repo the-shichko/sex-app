@@ -12,9 +12,8 @@ namespace sex_app.Service
     public class CommandService : BotExecuteService<Message>
     {
         private static readonly ListCommands<Message, string[], Task> BotCommands = new();
-        private static readonly UserService UserService = new();
 
-        public CommandService(ITelegramBotClient botClient) : base(botClient)
+        public CommandService(ITelegramBotClient botClient, UserService userService) : base(botClient, userService)
         {
             BotCommands.Add(new BotCommand<Message, string[], Task>(async (message, _) =>
             {
@@ -37,6 +36,13 @@ namespace sex_app.Service
                     var (messageText, mediaPath) = SexService.GetRandomPositionNew();
                     await BotClient.CustomSendPhotoAsync(message.Chat.Id, messageText, mediaPath);
                 }, "/random"));
+
+            BotCommands.Add(new BotCommand<Message, string[], Task>(
+                async (message, _) =>
+                {
+                    await ReplyMarkupService.TodoMarkup.Send(message.Chat.Id, botClient,
+                        UserService.GetCouple(message.Chat.Id).ToDoListText);
+                }, "/todo"));
 
             // BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, paramList) =>
             // {

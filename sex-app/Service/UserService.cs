@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using sex_app.Enums;
 using sex_app.Exceptions;
 using sex_app.Models;
 using Telegram.Bot.Types;
@@ -130,13 +131,22 @@ namespace sex_app.Service
         /// </summary>
         /// <param name="partnerId">Any partner's Id</param>
         /// <returns><see cref="ApplicationUsers"/></returns>
-        public ApplicationUsers GetCouple(long partnerId)
+        public ApplicationUsers GetCoupleUsers(long partnerId)
         {
             var couple = ApplicationCouples[partnerId];
 
             return couple != null
                 ? new ApplicationUsers(ApplicationUsers[couple.FirstPartner], ApplicationUsers[couple.SecondPartner])
                 : null;
+        }
+
+        public ApplicationCouple GetCouple(long partnerId) => ApplicationCouples[partnerId];
+        public ApplicationUser GetUser(long chatId) => ApplicationUsers[chatId];
+
+        public async Task SetStatusUser(long chatId, StatusUser statusUser = StatusUser.Default)
+        {
+            ApplicationUsers[chatId].StatusUser = statusUser;
+            await SaveSession();
         }
     }
 }

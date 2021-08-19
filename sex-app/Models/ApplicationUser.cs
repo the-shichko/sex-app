@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using sex_app.Enums;
 
 namespace sex_app.Models
 {
@@ -36,6 +37,7 @@ namespace sex_app.Models
         public Gender Gender { get; set; }
         public string CurrentMenuTitle { get; set; }
         public string Photo { get; set; }
+        public StatusUser StatusUser { get; set; } = StatusUser.Default;
     }
 
     public enum Gender

@@ -85,6 +85,30 @@ namespace sex_app.Service
                 }
             }, "Выберите пункт меню");
 
+        public static CustomInlineKeyboardMarkup TodoMarkup { get; } = new(
+            new List<List<CustomInlineKeyboardButton>>(
+                new List<List<CustomInlineKeyboardButton>>
+                {
+                    new()
+                    {
+                       new CustomInlineKeyboardButton("Добавить")
+                       {
+                           CallbackData = $"ToDo&{StatusUser.WaitAddToDo}"
+                       }, 
+                       new CustomInlineKeyboardButton("Удалить")
+                       {
+                           CallbackData = $"ToDo&{StatusUser.WaitRemoveToDo}"
+                       },
+                    },
+                    new ()
+                    {
+                        new CustomInlineKeyboardButton("Выполнить")
+                        {
+                            CallbackData = $"ToDo&{StatusUser.WaitExecuteToDo}"
+                        }
+                    }
+                }), ("Выберите"));
+
         public static void Init()
         {
             SetEnumsReply();
@@ -206,16 +230,16 @@ namespace sex_app.Service
             MessageText = messageText;
         }
 
-        public CustomInlineKeyboardMarkup(IEnumerable<IEnumerable<InlineKeyboardButton>> inlineKeyboard,
+        public CustomInlineKeyboardMarkup(IEnumerable<IEnumerable<CustomInlineKeyboardButton>> inlineKeyboard,
             string messageText) : base(
             inlineKeyboard)
         {
             MessageText = messageText;
         }
 
-        public async Task Send(long chatId, ITelegramBotClient botClient)
+        public async Task Send(long chatId, ITelegramBotClient botClient, string messageText = null)
         {
-            await botClient.SendTextMessageAsync(chatId, MessageText, replyMarkup: this);
+            await botClient.SendTextMessageAsync(chatId, messageText ?? MessageText, replyMarkup: this);
         }
     }
 }
