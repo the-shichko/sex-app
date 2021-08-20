@@ -5,57 +5,30 @@ using sex_app.Enums;
 using sex_app.Models;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace sex_app.Service
 {
     public class TextService : BotExecuteService<Message>
     {
-        private readonly ToDoService _toDoService;
-
         public TextService(ITelegramBotClient botClient, UserService userService, ToDoService toDoService) : base(
             botClient, userService)
         {
-            _toDoService = toDoService;
-
-            ListCommands.Add(new BotCommand<Message, string[], Task>(async (message, paramList) =>
+            ListCommands.Add(new BotCommand<Message, string[], Task>(async (message, paramArray) =>
             {
-                var user = userService.GetUser(message.Chat.Id);
-                var couple = userService.GetCouple(message.Chat.Id);
-                var resultMessage = string.Empty;
-                switch (user.StatusUser)
+                var chatId = message.Chat.Id;
+                var user = userService.GetUser(chatId);
+                var paramList = paramArray.ToList();
+                var resultMessage = user.StatusUser switch
                 {
-                    case StatusUser.Default:
-                        break;
-                    case StatusUser.WaitAddToDo:
-                        couple.ToDoList.AddRange(paramList.Select(text => new ToDoModel
-                        {
-                            Text = text
-                        }));
-                        resultMessage = "Успешно добавлено";
-                        break;
-                    case StatusUser.WaitRemoveToDo:
-                        foreach (var index in paramList.Select(x => int.TryParse(x, out var i) ? i : -1))
-                        {
-                            if (index <= couple.ToDoList.Count && index > 0)
-                                couple.ToDoList.RemoveAt(index - 1);
-                        }
-                        resultMessage = "Успешно удалено";
-                        break;
-                    case StatusUser.WaitExecuteToDo:
-                        var indexExecute = int.TryParse(paramList[0], out var i)
-                            ? i
-                            : throw new Exception("Введено не число");
-                        var toDoModel = indexExecute > 0 && indexExecute <= couple.ToDoList.Count
-                            ? couple.ToDoList[indexExecute - 1]
-                            : throw new Exception("Неверный индекс");
-                        toDoModel.ExecutionDate = DateTime.Now;
-                        resultMessage = "Успешно выполнено";
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    StatusUser.Default => throw new Exception("Статус нейтральный"),
+                    StatusUser.WaitAddToDo => toDoService.AddToDo(chatId, paramList),
+                    StatusUser.WaitRemoveToDo => toDoService.RemoveToDo(chatId, paramList),
+                    StatusUser.WaitExecuteToDo => toDoService.ExecuteToDo(chatId, paramList),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
 
-                await botClient.SendTextMessageAsync(user.Id, resultMessage);
+                await botClient.SendTextMessageAsync(user.Id, resultMessage, ParseMode.Markdown);
                 await userService.SetStatusUser(message.Chat.Id);
             }, string.Empty));
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using sex_app.Enums;
 using sex_app.Extensions;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace sex_app.Service
@@ -16,7 +17,7 @@ namespace sex_app.Service
             {
                 new()
                 {
-                    new CustomInlineKeyboardButton("Категории поз")
+                    new CustomInlineKeyboardButton("🔞 Категории поз")
                     {
                         CallbackData = "Menu-Category",
                         NextMarkup = new CustomInlineKeyboardMarkup(
@@ -68,7 +69,7 @@ namespace sex_app.Service
                                 },
                                 new()
                                 {
-                                    new CustomInlineKeyboardButton("Назад в меню")
+                                    new CustomInlineKeyboardButton("« Назад в меню")
                                     {
                                         CallbackData = "Back-Menu", IsBack = true
                                     },
@@ -78,7 +79,7 @@ namespace sex_app.Service
                 },
                 new()
                 {
-                    new CustomInlineKeyboardButton("Подборка")
+                    new CustomInlineKeyboardButton("💕 Подборка")
                     {
                         CallbackData = "Menu-Sex"
                     },
@@ -91,18 +92,18 @@ namespace sex_app.Service
                 {
                     new()
                     {
-                       new CustomInlineKeyboardButton("Добавить")
-                       {
-                           CallbackData = $"ToDo&{StatusUser.WaitAddToDo}"
-                       }, 
-                       new CustomInlineKeyboardButton("Удалить")
-                       {
-                           CallbackData = $"ToDo&{StatusUser.WaitRemoveToDo}"
-                       },
+                        new CustomInlineKeyboardButton("🟢")
+                        {
+                            CallbackData = $"ToDo&{StatusUser.WaitAddToDo}"
+                        },
+                        new CustomInlineKeyboardButton("🔴")
+                        {
+                            CallbackData = $"ToDo&{StatusUser.WaitRemoveToDo}"
+                        },
                     },
-                    new ()
+                    new()
                     {
-                        new CustomInlineKeyboardButton("Выполнить")
+                        new CustomInlineKeyboardButton("Выполнить ✅")
                         {
                             CallbackData = $"ToDo&{StatusUser.WaitExecuteToDo}"
                         }
@@ -196,7 +197,7 @@ namespace sex_app.Service
 
             inlineButtons.Add(new List<CustomInlineKeyboardButton>()
             {
-                new("Назад к категориям") { IsBack = true, CallbackData = "BackCategory" },
+                new("« Назад к категориям") { IsBack = true, CallbackData = "BackCategory" },
             });
 
             return new CustomInlineKeyboardMarkup(inlineButtons, "Выберите из списка значение для подбора позы)");
@@ -239,7 +240,8 @@ namespace sex_app.Service
 
         public async Task Send(long chatId, ITelegramBotClient botClient, string messageText = null)
         {
-            await botClient.SendTextMessageAsync(chatId, messageText ?? MessageText, replyMarkup: this);
+            await botClient.SendTextMessageAsync(chatId, messageText ?? MessageText, replyMarkup: this,
+                parseMode: ParseMode.Markdown);
         }
     }
 }

@@ -15,7 +15,9 @@ namespace sex_app.Models
         public string ToDoListText =>
             "Ваш список дел:\n" + (ToDoList.Any()
                 ? string.Join("\n",
-                    ToDoList.Select((item, index) => $"{(item.IsExecuted ? "✅" : "⌛")} {index + 1}. {item.Text}"))
+                    ToDoList.Select((item, index) =>
+                        $"{(item.IsExecuted ? "✅" : "⌛")} {index + 1}. "
+                        + $"_{item.Text}_ {(item.IsExecuted ? $"- {item.ExecutionDate:dd MMMM yy}" : "")}"))
                 : "Пусто");
     }
 
