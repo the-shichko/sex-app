@@ -36,36 +36,14 @@ namespace sex_app.Service
                                 },
                                 new()
                                 {
-                                    new CustomInlineKeyboardButton("Стимулирование")
-                                    {
-                                        CallbackData = "Enums.Stimulation"
-                                    },
-                                    new CustomInlineKeyboardButton("Проникновение")
-                                    {
-                                        CallbackData = "Enums.LevelPenetration"
-                                    },
-                                },
-                                new()
-                                {
                                     new CustomInlineKeyboardButton("Активность")
                                     {
                                         CallbackData = "Enums.Activity"
                                     },
-                                    new CustomInlineKeyboardButton("Зрит. контакт")
-                                    {
-                                        CallbackData = "Enums.BaseBool"
-                                    },
-                                },
-                                new()
-                                {
                                     new CustomInlineKeyboardButton("Уровень")
                                     {
                                         CallbackData = "Enums.Level"
-                                    },
-                                    new CustomInlineKeyboardButton("Доп. ласки")
-                                    {
-                                        CallbackData = "Enums.AdditionalCaress"
-                                    },
+                                    }
                                 },
                                 new()
                                 {
@@ -110,6 +88,11 @@ namespace sex_app.Service
                     }
                 }), ("Выберите"));
 
+        public static InlineKeyboardMarkup InfoPoseMarkup(string callback)
+        {
+            return new InlineKeyboardMarkup(new InlineKeyboardButton("Подробнее »") { CallbackData = callback });
+        }
+
         public static void Init()
         {
             SetEnumsReply();
@@ -136,11 +119,7 @@ namespace sex_app.Service
         {
             FindReplyButtonByData("Enums.Category").NextMarkup = GetReplyEnum(typeof(Category));
             FindReplyButtonByData("Enums.Location").NextMarkup = GetReplyEnum(typeof(Location));
-            FindReplyButtonByData("Enums.Stimulation").NextMarkup = GetReplyEnum(typeof(Stimulation));
-            FindReplyButtonByData("Enums.LevelPenetration").NextMarkup = GetReplyEnum(typeof(LevelPenetration));
-            FindReplyButtonByData("Enums.AdditionalCaress").NextMarkup = GetReplyEnum(typeof(AdditionalCaress));
             FindReplyButtonByData("Enums.Activity").NextMarkup = GetReplyEnum(typeof(Activity));
-            FindReplyButtonByData("Enums.BaseBool").NextMarkup = GetReplyEnum(typeof(BaseBool));
             FindReplyButtonByData("Enums.Level").NextMarkup = GetReplyEnum(typeof(Level));
         }
 

@@ -14,14 +14,18 @@ namespace sex_app.Enums
         Reverse,
         [Display(Name = "Стоя")]
         StandingUp,
-        [Display(Name = "Лежа")]
-        LyingDown,
+        [Display(Name = "Лежа (муж.)")]
+        MenLyingDown,
+        [Display(Name = "Лежа (жен.)")]
+        WomenLyingDown,
         [Display(Name = "Лицо к лицу")]
         FaceToFace,
         [Display(Name = "Наездница")]
         Rider,
-        [Display(Name = "На коленях")]
-        OnKnees,
+        [Display(Name = "Муж. на коленях")]
+        MenOnKnees,
+        [Display(Name = "Жен. на коленях")]
+        WomenOnKnees,
         [Display(Name = "Сидя")]
         Sitting,
         [Display(Name = "Doggy style")]

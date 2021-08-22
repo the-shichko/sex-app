@@ -43,6 +43,12 @@ namespace sex_app.Service
                     await botClient.SendTextMessageAsync(callbackQuery.From.Id,
                         TgMessageStatusResources.Values[newStatus]);
                 }, "ToDo"));
+
+            ListCommands.Add(new BotCommand<CallbackQuery, string[], Task>(
+                async (callback, paramArray) =>
+                {
+                    await botClient.SendTextMessageAsync(callback.From.Id, SexService.GetInfoByImage(paramArray[1]));
+                }, "infoPose"));
         }
 
         public override Func<CallbackQuery, ITelegramBotClient, string[], Task> ExecuteAction { get; set; } =

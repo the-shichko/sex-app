@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using sex_app.Service;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -12,12 +13,13 @@ namespace sex_app.Extensions
 {
     public static class TelegramBotClientExtensions
     {
-        public static async Task<Message> CustomSendPhotoAsync(this ITelegramBotClient client, long chatId, string message,
-            string mediaPath)
+        public static async Task<Message> CustomSendPhotoAsync(this ITelegramBotClient client, long chatId,
+            string message, string mediaPath)
         {
-            await using var stream = System.IO.File.Open(mediaPath, System.IO.FileMode.Open);
+            await using var stream = System.IO.File.Open(mediaPath, FileMode.Open);
             return await client.SendPhotoAsync(chatId,
-                new InputMedia(stream, "test.png"), message, ParseMode.Markdown);
+                new InputMedia(stream, "test.png"), message, ParseMode.Markdown,
+                replyMarkup: ReplyMarkupService.InfoPoseMarkup($"infoPose&{mediaPath.Split('\\').LastOrDefault()}"));
         }
 
         public static async Task<IEnumerable<Message>> CustomSendTextMessageAsync(

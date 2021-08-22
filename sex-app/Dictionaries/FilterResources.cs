@@ -9,8 +9,7 @@ namespace sex_app.Dictionaries
         {
             "Location",
             "Category",
-            "Stimulation",
-            "AdditionalCaress"
+            "Stimulation"
         };
     }
 }

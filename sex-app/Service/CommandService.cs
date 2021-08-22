@@ -11,11 +11,9 @@ namespace sex_app.Service
 {
     public class CommandService : BotExecuteService<Message>
     {
-        private static readonly ListCommands<Message, string[], Task> BotCommands = new();
-
         public CommandService(ITelegramBotClient botClient, UserService userService) : base(botClient, userService)
         {
-            BotCommands.Add(new BotCommand<Message, string[], Task>(async (message, _) =>
+            ListCommands.Add(new BotCommand<Message, string[], Task>(async (message, _) =>
             {
                 var chatId = message.Chat.Id;
                 await UserService.AddUser(message.Chat);
@@ -26,18 +24,18 @@ namespace sex_app.Service
                 await BotClient.SendTextMessageAsync(chatId, $"/couple *{chatId}*", ParseMode.Markdown);
             }, "/start"));
 
-            BotCommands.Add(new BotCommand<Message, string[], Task>(
+            ListCommands.Add(new BotCommand<Message, string[], Task>(
                 async (message, _) => { await ReplyMarkupService.MenuMarkup.Send(message.Chat.Id, botClient); },
                 "/menu"));
 
-            BotCommands.Add(new BotCommand<Message, string[], Task>(
+            ListCommands.Add(new BotCommand<Message, string[], Task>(
                 async (message, _) =>
                 {
                     var (messageText, mediaPath) = SexService.GetRandomPositionNew();
                     await BotClient.CustomSendPhotoAsync(message.Chat.Id, messageText, mediaPath);
                 }, "/random"));
 
-            BotCommands.Add(new BotCommand<Message, string[], Task>(
+            ListCommands.Add(new BotCommand<Message, string[], Task>(
                 async (message, _) =>
                 {
                     await ReplyMarkupService.TodoMarkup.Send(message.Chat.Id, botClient,
@@ -96,7 +94,7 @@ namespace sex_app.Service
             {
                 if (paramList[0].Contains("/"))
                 {
-                    var commandModel = BotCommands[paramList[0]];
+                    var commandModel = ListCommands[paramList[0]];
                     if (commandModel != null)
                     {
                         await commandModel.Execute(message, paramList.Skip(1).ToArray());

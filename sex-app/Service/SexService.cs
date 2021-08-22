@@ -110,5 +110,11 @@ namespace sex_app.Service
 
             return listPaths;
         }
+
+        public static string GetInfoByImage(string imagePath)
+        {
+            var imageName = imagePath.Split('\\', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            return _listPositions.FirstOrDefault(x => x.FileName == imageName)?.Text;
+        }
     }
 }
