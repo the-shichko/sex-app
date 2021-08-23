@@ -8,14 +8,16 @@ namespace sex_app.Enums
         MenOnTop,
         [Display(Name = "Женщина сверху")]
         WomenOnTop,
-        [Display(Name = "Мужчина сзади")]
-        MenBehind,
-        [Display(Name = "Реверс")]
-        Reverse,
-        [Display(Name = "Стоя")]
-        StandingUp,
+        // [Display(Name = "Мужчина сзади")]
+        // MenBehind,
+        // [Display(Name = "Реверс")]
+        // Reverse,
+        // [Display(Name = "Стоя")]
+        // StandingUp,
         [Display(Name = "Лежа (муж.)")]
         MenLyingDown,
+        [Display(Name = "Сидя (муж.)")]
+        MenSitting,
         [Display(Name = "Лежа (жен.)")]
         WomenLyingDown,
         [Display(Name = "Лицо к лицу")]
@@ -26,8 +28,6 @@ namespace sex_app.Enums
         MenOnKnees,
         [Display(Name = "Жен. на коленях")]
         WomenOnKnees,
-        [Display(Name = "Сидя")]
-        Sitting,
         [Display(Name = "Doggy style")]
         DoggyStyle,
         [Display(Name = "Ноги на плечах")]

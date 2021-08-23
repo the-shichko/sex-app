@@ -41,6 +41,12 @@ namespace sex_app.Service
                     await ReplyMarkupService.TodoMarkup.Send(message.Chat.Id, botClient,
                         UserService.GetCouple(message.Chat.Id).ToDoListText);
                 }, "/todo"));
+            
+            ListCommands.Add(new BotCommand<Message, string[], Task>(
+                async (message, _) =>
+                {
+                    await botClient.SendTextMessageAsync(message.Chat.Id, SexService.AboutBot());
+                }, "/botinfo"));
 
             // BotCommands.Add(new BotCommand<MessageEventArgs, string[], Task>(async (e, paramList) =>
             // {

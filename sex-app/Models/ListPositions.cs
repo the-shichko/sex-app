@@ -6,6 +6,7 @@ using sex_app.Extensions;
 
 namespace sex_app.Models
 {
+    //TODO Transfer to JSON
     public class ListPositions : List<PositionItem>
     {
         public ListPositions(IEnumerable<PositionItem> items)
@@ -70,7 +71,79 @@ namespace sex_app.Models
                     Title = "Face Down Doggy (Собачка лицом вниз)",
                     Text =
                         "В варианте «Собачий стиль» лицом вниз женщина наклоняется вперед и кладет голову на пол. Угол проникновения не идеален для попадания в точку G, но отлично подходит для удара в малоизвестное место во влагалище, называемое задним сводом, а некоторые могут даже обнаружить усиленную стимуляцию клитора. Подушки рекомендуются под ее голову, а также под колени обоих людей, что не должно вызывать удивления, поскольку мы довольно много заботимся о комфорте. ",
-                    FileName = "dobby2.png"
+                    FileName = "doggy2.png"
+                },
+                new()
+                {
+                    Activity = Activity.Men,
+                    Categories = new List<Category> { Category.Sex },
+                    Level = Level.Easy,
+                    Locations = new List<Location>
+                        { Location.FaceToFace, Location.MenLyingDown, Location.WomenLyingDown, Location.MenOnTop },
+                    Title = "Tucked Missionary",
+                    Text =
+                        "Близкий родственник Folded Missionary, вариант Tucked отличается тем, что ноги женщины согнуты в коленях и расположены снаружи тела мужчины. Это позволяет снизить нагрузку на мужчин, которые слишком сильно наклоняются, и намного легче добиться интимной близости без ног. Мы рекомендуем женщинам поэкспериментировать как с углом таза, так и с тем, насколько открыты ноги, чтобы найти то, что чувствует себя лучше всего. ",
+                    FileName = "missionary3.png"
+                },
+                new()
+                {
+                    Activity = Activity.Men,
+                    Categories = new List<Category> { Category.OralSex, Category.Cunnilingus },
+                    Level = Level.Easy,
+                    Locations = new List<Location>
+                        { Location.MenLyingDown, Location.WomenLyingDown },
+                    Title = "Eagle (Орел)",
+                    Text =
+                        "В (раскинутой) позе орла женщина лежит на спине, поставив ступни, а мужчина лежит лицом вниз между ее ног. Эта поза пользуется большим успехом из-за высокого уровня комфорта, но может быть немного сложно добавить аппликатуру из-за ограниченного пространства для локтей ... Тем не менее, ее грудь находится в пределах досягаемости ... что всегда является преимуществом. Вы также можете подумать о подушке под ее спиной, чтобы наклонить ее таз для лучшего доступа к ротовой полости и уменьшить нагрузку на шею мужчины.",
+                    FileName = "cunnilingus.png"
+                },
+                new()
+                {
+                    Activity = Activity.Women,
+                    Categories = new List<Category> { Category.OralSex, Category.Blowjob },
+                    Level = Level.Easy,
+                    Locations = new List<Location>
+                        { Location.MenLyingDown, Location.WomenOnKnees },
+                    Title = "Usual (Обычно)",
+                    Text =
+                        "Вероятно, самый распространенный способ исполнения фелляции, в «Обычном» есть много чего. В него легко попасть, очень удобно, и это не сильно напрягает женскую шею. Это положение можно удерживать в течение длительного периода, прежде чем потребуется сделать перерыв или сменить положение, особенно при смене рук по мере необходимости. Единственным реальным недостатком является то, что распущенные длинные волосы могут попасть в рот, поэтому мужчинам следует подумать о помощи, когда это необходимо. ",
+                    FileName = "blowjob.png"
+                },
+                new()
+                {
+                    Activity = Activity.Both,
+                    Categories = new List<Category> { Category.OralSex, Category.Position69 },
+                    Level = Level.Easy,
+                    Locations = new List<Location>
+                        { Location.MenLyingDown, Location.WomenOnKnees },
+                    Title = "69",
+                    Text =
+                        "Оригинальная поза 69, которую легко выполнять, остается одной из самых популярных поз 69. В стандартном варианте мужчина ложится на спину, а его партнер становится на колени перед его лицом и наклоняется вперед. Подушка под голову мужчине - это необходимое условие, если вы собираетесь провести какое-то время в этой позе. ",
+                    FileName = "69.png"
+                },
+                new()
+                {
+                    Activity = Activity.Women,
+                    Categories = new List<Category> { Category.OralSex, Category.Blowjob },
+                    Level = Level.Easy,
+                    Locations = new List<Location>
+                        { Location.MenLyingDown, Location.WomenLyingDown },
+                    Title = "Open Usual",
+                    Text =
+                        "Открытый Обычный - это тонкая вариация Обычного, где мужчина раздвигает ноги, а женщина лежит между ними. Несмотря на небольшую разницу на бумаге, это оказывает огромное влияние на возможное количество яичек и анальной игры. Хорошей идеей будет иметь несколько подушек под спиной мужчины, чтобы наклонить его таз и еще больше улучшить доступ.",
+                    FileName = "blowjob2.png"
+                },
+                new()
+                {
+                    Activity = Activity.Women,
+                    Categories = new List<Category> { Category.OralSex, Category.Blowjob },
+                    Level = Level.Easy,
+                    Locations = new List<Location>
+                        { Location.MenSitting, Location.WomenOnKnees },
+                    Title = "Sit & Blow",
+                    Text =
+                        "Sit & Blow - отличный способ заставить любого мужчину почувствовать себя королем замка ... и мы хотели бы думать, что это был любимый способ Билла произнести некоторые слова в овале. Легко попасть и довольно удобно, единственное, что мы действительно можем сказать, помимо шуток, - это то, что некоторые подушки на полу - это всегда умная игра, когда мы стоим на коленях.",
+                    FileName = "blowjob3.png"
                 }
             });
         }

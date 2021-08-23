@@ -29,9 +29,9 @@ namespace sex_app.Service
                             SexService.GetSexSet(
                                 new Dictionary<Category, int>()
                                 {
-                                    { Category.Cunnilingus, 2 },
-                                    { Category.Blowjob, 2 },
-                                    { Category.Sex, 3 }
+                                    { Category.Cunnilingus, 1 },
+                                    { Category.Blowjob, 1 },
+                                    { Category.Sex, 2 }
                                 }));
                 }, "Menu-Sex"));
 
@@ -47,7 +47,10 @@ namespace sex_app.Service
             ListCommands.Add(new BotCommand<CallbackQuery, string[], Task>(
                 async (callback, paramArray) =>
                 {
-                    await botClient.SendTextMessageAsync(callback.From.Id, SexService.GetInfoByImage(paramArray[1]));
+                    var chatId = callback.Message!.Chat.Id;
+                    var messageId = callback.Message!.MessageId;
+                    await botClient.EditMessageCaptionAsync(chatId, messageId,
+                        $"{callback.Message?.Caption}\n\n{SexService.GetInfoByImage(paramArray[1])}");
                 }, "infoPose"));
         }
 

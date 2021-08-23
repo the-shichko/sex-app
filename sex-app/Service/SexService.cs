@@ -82,9 +82,11 @@ namespace sex_app.Service
                     .ToList();
             }
 
-            var index = CustomRandom(0, filterList.Count - 1);
-            return (filterList[index].ToTelegramMessage(),
-                $"{ResourcesPath}\\{filterList[index].FileName}");
+            var index = filterList.Count > 2 ? CustomRandom(0, filterList.Count - 1) : 0;
+            return filterList.Any()
+                ? (filterList[index].ToTelegramMessage(),
+                    $"{ResourcesPath}\\{filterList[index].FileName}")
+                : ("Данная поза не добавлена... Приносим извинения", $"{ResourcesPath}\\dev.jpg");
         }
 
         /// <summary>
@@ -115,6 +117,11 @@ namespace sex_app.Service
         {
             var imageName = imagePath.Split('\\', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
             return _listPositions.FirstOrDefault(x => x.FileName == imageName)?.Text;
+        }
+
+        public static string AboutBot()
+        {
+            return $"Количество поз: {_listPositions.Count}";
         }
     }
 }
